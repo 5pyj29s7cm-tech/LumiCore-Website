@@ -1,179 +1,126 @@
 <!doctype html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#07090f" />
-    <meta name="description" content="LumiOS 是以用户行为为导向、语音交互为主的私有化本地智能体系统。" />
-    <meta property="og:title" content="LumiOS · 真正属于你的本地智能体" />
-    <meta property="og:description" content="本地优先、持续记忆、多模型协同、技能与工具执行。" />
-    <meta property="og:type" content="website" />
-    <link rel="canonical" href="https://lumiai.asia/" />
-    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-    <title>LumiOS · 真正属于你的本地智能体</title>
-    <link rel="stylesheet" href="/styles.css" />
-    <script src="/site-config.js" defer></script>
-    <script src="/app.js" defer></script>
-  </head>
-  <body>
-    <div class="ambient ambient-one" aria-hidden="true"></div>
-    <div class="ambient ambient-two" aria-hidden="true"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#05050a" />
+  <meta name="description" content="LumiOS 是以用户行为为导向、语音交互为主的私有化本地智能体系统。连接模型、记忆、技能、工具与外部智能体。" />
+  <meta property="og:title" content="LumiOS · 分布式智能，从本地开始" />
+  <meta property="og:description" content="本地优先、持续记忆、多模型协同、技能与工具执行。" />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://lumiai.asia/" />
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <title>LumiOS · 分布式智能，从本地开始</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="/site-config.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="undulating-bg" aria-hidden="true"></div>
+  <div class="star-field" aria-hidden="true"></div>
 
-    <header class="site-header" data-header>
-      <a class="brand" href="#top" aria-label="LumiOS 首页">
-        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span><strong>LUMI</strong><small>OS</small></span>
-      </a>
-      <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" data-menu-toggle>
-        <span></span><span></span>
-      </button>
-      <nav class="site-nav" data-menu>
-        <a href="#product">产品</a>
-        <a href="#capabilities">能力</a>
-        <a href="#industries">行业版本</a>
-        <a href="#open-source">开源</a>
-        <a class="nav-github" data-repository href="#" target="_blank" rel="noreferrer">
-          <span>GitHub</span><b data-star-count>263</b><span>★</span>
-        </a>
-      </nav>
-    </header>
+  <header class="site-header glass" data-header>
+    <a class="brand" href="#top" aria-label="LumiOS 首页">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 16.5 14.5 7l2.5 2.5L7.5 19H5v-2.5Zm10.7-10.7 1.1-1.1a1.4 1.4 0 0 1 2 0l.5.5a1.4 1.4 0 0 1 0 2l-1.1 1.1-2.5-2.5ZM7 6h3M5.5 8.5h2M17 16v3m-1.5-1.5h3"/></svg></span>
+      <span class="brand-copy"><strong>LUMI KERNEL</strong><small>STABLE · LOCAL AGENT OS</small></span>
+    </a>
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
+    <nav class="site-nav" data-menu>
+      <a href="#top">交互</a><a href="#ecosystem">生态</a><a href="#product">产品</a><a href="#vision">核心愿景</a><a href="#industries">行业版本</a>
+      <a class="nav-github" data-repository href="#" target="_blank" rel="noreferrer">GitHub <b data-star-count>263</b><span>★</span></a>
+    </nav>
+  </header>
 
-    <main id="top">
-      <section class="hero section-shell">
-        <div class="hero-copy reveal">
-          <div class="eyebrow"><span></span> LOCAL-FIRST PERSONAL AGENT OS</div>
-          <h1>让 AI 不只回答，<br /><em>而是理解你并完成工作。</em></h1>
-          <p class="hero-lead">
-            LumiOS 是以用户行为为导向、语音交互为主的私有化本地智能体。
-            它连接模型、记忆、技能、工具与外部智能体，把自然沟通转化为可验证的工作结果。
-          </p>
-          <div class="hero-actions">
-            <a class="button button-primary" data-download href="#" target="_blank" rel="noreferrer">下载 LumiOS <span>↗</span></a>
-            <a class="button button-ghost" data-repository href="#" target="_blank" rel="noreferrer">查看源码 <span>↗</span></a>
-          </div>
-          <div class="hero-notes">
-            <span><i class="status-dot"></i> Windows / macOS</span>
-            <span>AGPL-3.0 开源</span>
-            <span>本地数据优先</span>
-          </div>
-        </div>
-
-        <div class="hero-visual reveal" aria-label="LumiOS 多模型智能体核心示意">
-          <div class="core-grid"></div>
-          <div class="orbit orbit-a"><span>记忆</span></div>
-          <div class="orbit orbit-b"><span>模型</span></div>
-          <div class="orbit orbit-c"><span>工具</span></div>
-          <div class="lumi-core">
-            <div class="core-halo"></div>
-            <div class="core-body"><strong>LUMI</strong><small>LOCAL AGENT</small></div>
-          </div>
-          <div class="signal-card signal-top"><b>VOICE</b><span>自然语音交互</span></div>
-          <div class="signal-card signal-bottom"><b>RECEIPT</b><span>任务结果可追溯</span></div>
-        </div>
-      </section>
-
-      <section class="principles" id="product">
-        <div class="section-shell principle-grid reveal">
-          <article><span>01</span><h3>属于用户</h3><p>模型和服务可替换，数据、记忆与人格由用户掌控。</p></article>
-          <article><span>02</span><h3>自然沟通</h3><p>以语音为主，也支持文字与跨渠道对话，连续理解上下文。</p></article>
-          <article><span>03</span><h3>真实执行</h3><p>通过技能、工具和智能体协作完成事务，并用回执验证结果。</p></article>
-          <article><span>04</span><h3>持续成长</h3><p>在明确边界内吸收知识、沉淀习惯，让 Lumi 越用越贴近你。</p></article>
-        </div>
-      </section>
-
-      <section class="section-shell section-block" id="capabilities">
-        <div class="section-heading reveal">
-          <div><span class="section-index">01 / CAPABILITIES</span><h2>一个中枢，编排完整的智能工作链。</h2></div>
-          <p>LumiOS 不把能力锁死在单一模型中。它根据任务选择模型、技能和工具，并保留任务状态与执行证据。</p>
-        </div>
-        <div class="capability-layout reveal">
-          <article class="feature feature-wide">
-            <div class="feature-icon">◎</div><span>多模型编排</span>
-            <h3>云端与本地模型，都只是可组合的能力节点。</h3>
-            <p>支持 OpenAI、DeepSeek、Qwen、豆包、Gemini、Claude、Ollama、LM Studio 及兼容接口；在模型不可用时明确失败，不偷偷替换。</p>
-            <div class="model-strip"><b>LOCAL</b><b>CLOUD</b><b>VOICE</b><b>VISION</b><b>REASONING</b></div>
-          </article>
-          <article class="feature">
-            <div class="feature-icon">◌</div><span>记忆与知识</span>
-            <h3>记住关系、偏好、项目与长期目标。</h3>
-            <p>分层记忆与知识库检索，让每次协作建立在用户自己的上下文之上。</p>
-          </article>
-          <article class="feature">
-            <div class="feature-icon">⌁</div><span>工具与技能</span>
-            <h3>把自然语言变成可核验的行动。</h3>
-            <p>桌面程序、行业软件、MCP、网页和外部智能体统一进入任务管线。</p>
-          </article>
-          <article class="feature feature-dark">
-            <div class="feature-icon">◈</div><span>指挥中心</span>
-            <h3>边沟通，边工作，边查看任务状态。</h3>
-            <p>聊天、任务账本、长期追求、周期汇报与智能体团队形成一个持续工作空间。</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section-block industry-section" id="industries">
-        <div class="section-shell">
-          <div class="section-heading reveal">
-            <div><span class="section-index">02 / INDUSTRY EDITIONS</span><h2>保留 Lumi 的核心，为真实行业做减法。</h2></div>
-            <p>定制版不是换皮。它把复杂能力压缩为客户熟悉的业务入口，用稳定、可复用的流程直接交付结果。</p>
-          </div>
-          <div class="edition-tabs reveal" role="tablist" aria-label="LumiOS 行业版本">
-            <button class="active" data-edition="commerce" type="button">电商版</button>
-            <button data-edition="design" type="button">设计师版</button>
-            <button data-edition="legal" type="button">律师版</button>
-            <button data-edition="finance" type="button">财税版</button>
-          </div>
-          <div class="edition-stage reveal" data-edition-stage>
-            <div class="edition-copy">
-              <span data-edition-kicker>COMMERCE</span>
-              <h3 data-edition-title>从今日经营到内容客服，一条链完成。</h3>
-              <p data-edition-description>围绕店铺日常经营组织数据、商品、内容和客服工作；涉及改价、上下架与外发时保留人工确认。</p>
-            </div>
-            <div class="workflow" data-edition-workflow>
-              <span>今日经营</span><i>→</i><span>爆款雷达</span><i>→</i><span>店铺数据</span><i>→</i><span>商品管理</span><i>→</i><span>内容与客服</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-shell section-block open-source" id="open-source">
-        <div class="open-source-panel reveal">
-          <div class="repo-orbit" aria-hidden="true"><span>{ }</span></div>
-          <div class="open-source-copy">
-            <span class="section-index">03 / OPEN SOURCE</span>
-            <h2>公开核心代码，与开发者一起扩展 Lumi。</h2>
-            <p>
-              LumiOS 采用 AGPL-3.0 许可证开放源码。你可以检查本地数据边界、参与能力改进、开发行业技能和硬件连接，也可以从稳定版本构建自己的交付方案。
-            </p>
-            <div class="repo-meta">
-              <span><strong data-star-count>263</strong> stars</span>
-              <span>持续迭代</span>
-              <span>社区共建</span>
-            </div>
-            <div class="hero-actions">
-              <a class="button button-primary" data-repository href="#" target="_blank" rel="noreferrer">在 GitHub 查看源码 <span>↗</span></a>
-              <a class="button button-ghost" data-contact href="#" target="_blank" rel="noreferrer">提交建议</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-shell final-cta reveal">
-        <p>YOUR AI. YOUR MEMORY. YOUR WORKFLOW.</p>
-        <h2>从一台电脑开始，拥有真正属于你的 Lumi。</h2>
-        <div class="hero-actions">
-          <a class="button button-primary" data-download href="#" target="_blank" rel="noreferrer">下载客户端 <span>↗</span></a>
-          <a class="button button-ghost" data-repository href="#" target="_blank" rel="noreferrer">加入开源社区</a>
-        </div>
-      </section>
-    </main>
-
-    <footer>
-      <div class="section-shell footer-inner">
-        <div><a class="brand" href="#top"><span class="brand-mark"><i></i><i></i><i></i></span><span><strong>LUMI</strong><small>OS</small></span></a><p>浙江灵序科技有限公司</p></div>
-        <div class="footer-links"><a href="#product">产品</a><a href="#industries">行业版本</a><a data-repository href="#" target="_blank" rel="noreferrer">GitHub</a><a data-contact href="#" target="_blank" rel="noreferrer">联系</a></div>
-        <span class="copyright">© <span data-year></span> Lumi AI</span>
+  <main id="top">
+    <section class="hero section-shell">
+      <div class="hero-orb reveal">
+        <div class="orb-aura"></div>
+        <canvas id="lumi-orb" width="680" height="680" aria-label="Lumi 粒子核心"></canvas>
+        <div class="orb-status"><i></i><span>LUMI CORE ONLINE</span></div>
       </div>
-    </footer>
-  </body>
+      <div class="hero-copy reveal">
+        <div class="node-badge"><span class="node-lights"><i></i><i></i><i></i></span><b>ACTIVE NODES</b><strong>42,901</strong><em>VERIFIED</em></div>
+        <div class="heritage-links"><a href="#vision">核心愿景</a><a href="#founders">创始人圣殿</a></div>
+        <p class="eyebrow">DISTRIBUTED INTELLIGENCE</p>
+        <h1>分布式智能</h1>
+        <p class="hero-subtitle">我们不仅是在开发工具，<br />我们正在构建一个人类与 AI 共存的新生态。</p>
+        <div class="hero-actions">
+          <a class="button button-primary" data-download href="#" target="_blank" rel="noreferrer">初始化 LumiOS <span>↗</span></a>
+          <a class="button button-ghost" data-repository href="#" target="_blank" rel="noreferrer">查看源代码 <span>→</span></a>
+        </div>
+        <div class="hero-notes"><span><i class="status-dot"></i>Windows / macOS</span><span>AGPL-3.0</span><span>本地数据优先</span></div>
+      </div>
+    </section>
+
+    <section class="legacy-strip" aria-label="LumiOS 原官网能力谱系">
+      <div class="section-shell legacy-grid reveal">
+        <article><span>01</span><b>全息入口</b><small>人与 Lumi 的持续交互中心</small></article>
+        <article><span>02</span><b>神经合成实验室</b><small>记忆、人格与知识成长</small></article>
+        <article><span>03</span><b>Lumi 宇宙</b><small>分布式智能体协作网络</small></article>
+        <article><span>04</span><b>智能宿主计划</b><small>让软件与硬件都能承载 Lumi</small></article>
+      </div>
+    </section>
+
+    <section class="section-shell section-block" id="product">
+      <div class="section-heading reveal">
+        <div><span class="section-index">01 / LOCAL AGENT OS</span><h2>一个中枢，编排完整的智能工作链。</h2></div>
+        <p>LumiOS 不把能力锁死在单一模型里。它连接模型、记忆、人格、技能、工具和外部智能体，让自然沟通最终落到可追溯的工作结果。</p>
+      </div>
+      <div class="capability-layout reveal">
+        <article class="feature feature-wide"><span class="feature-tag">多模型编排</span><h3>云端与本地模型，都是可组合的能力节点。</h3><p>根据对话、推理、视觉、语音和行业任务选择合适模型；连接失败时明确汇报，不偷偷替换用户选择。</p><div class="model-strip"><b>LOCAL</b><b>CLOUD</b><b>VOICE</b><b>VISION</b><b>REASONING</b></div></article>
+        <article class="feature"><span class="feature-tag">记忆与知识</span><h3>记住关系、偏好、项目与长期追求。</h3><p>分层记忆和知识库检索，让每次协作建立在用户自己的上下文上。</p></article>
+        <article class="feature"><span class="feature-tag">工具与技能</span><h3>把自然语言变成可核验的行动。</h3><p>桌面程序、行业软件、MCP、网页与外部智能体统一进入任务管线。</p></article>
+        <article class="feature feature-accent"><span class="feature-tag">指挥中心</span><h3>边沟通，边工作，边查看真实进度。</h3><p>聊天、任务账本、长期追求、周期汇报和智能体团队构成持续工作空间。</p></article>
+      </div>
+    </section>
+
+    <section class="section-block ecosystem" id="ecosystem">
+      <div class="section-shell">
+        <div class="section-heading reveal">
+          <div><span class="section-index">02 / NEURAL ECOSYSTEM</span><h2>同一个神经核心，适应不同界面与载体。</h2></div>
+          <p>桌面端负责高性能自动化，移动端承担随身感知，硬件节点扩展物理世界，外部智能体协作完成更复杂的工作。</p>
+        </div>
+        <div class="node-layout reveal">
+          <article class="node-card node-desktop"><div class="node-icon">⌘</div><span>DESKTOP NODE · BRAIN</span><h3>桌面节点</h3><p>本地智能体核心、加密存储、桌面协同与行业工作流。</p><div class="node-metrics"><b>LOCAL FIRST<small>数据边界</small></b><b>VERIFIED<small>任务回执</small></b></div></article>
+          <article class="node-card node-mobile"><div class="node-icon">◫</div><span>MOBILE GATEWAY · SENSE</span><h3>移动感知端</h3><p>延续身份、记忆与对话，在移动场景中成为 Lumi 的感知入口。</p><div class="node-metrics"><b>SYNC<small>上下文连续</small></b><b>VOICE<small>随身交互</small></b></div></article>
+          <article class="mesh-card"><div class="mesh-core"><span>LUMI</span></div><i class="mesh-ring one"></i><i class="mesh-ring two"></i><b>GLOBAL NEURAL MESH</b><p>本地节点保持数据主权，只在用户授权的任务边界内协作。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-shell section-block vision" id="vision">
+      <div class="vision-panel reveal">
+        <div class="vision-code">THE PRIME<br />DIRECTIVE</div>
+        <div><span class="section-index">03 / CORE VISION</span><h2>智能应该赋能个人，而不是让个人失去控制。</h2><p>LumiOS 的长期方向始终来自原官网的核心愿景：本地智能、数据主权、独立人格、分布式协作，以及可以进入软件、硬件和现实行业的通用神经核心。</p><ul><li>数据、记忆和人格由用户掌控</li><li>模型与服务可选择、可替换、可验证</li><li>外部执行有边界、有确认、有回执</li></ul></div>
+      </div>
+    </section>
+
+    <section class="section-block host-program" id="founders">
+      <div class="section-shell host-grid reveal">
+        <div class="host-visual"><span class="host-core">L</span><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div><span class="section-index">04 / SMART HOST PROGRAM</span><h2>万物皆可 Lumi。</h2><p>让 Lumi 寄宿于现有软件、行业程序、专用设备与智能硬件，以统一的身份、记忆和执行纪律进入真实世界。</p><div class="host-points"><span>软件定制版</span><span>MCP 硬件连接</span><span>外部 AI 协作</span><span>分布式 OS 核心</span></div></div>
+      </div>
+    </section>
+
+    <section class="section-shell section-block" id="industries">
+      <div class="section-heading reveal">
+        <div><span class="section-index">05 / INDUSTRY EDITIONS</span><h2>保留 Lumi 的核心，为真实行业做减法。</h2></div>
+        <p>定制版不是换皮。它把复杂能力压缩成客户熟悉的业务入口，用稳定、可复用的流程直接交付结果。</p>
+      </div>
+      <div class="edition-tabs reveal" role="tablist" aria-label="LumiOS 行业版本"><button class="active" data-edition="commerce" type="button">电商版</button><button data-edition="design" type="button">设计师版</button><button data-edition="legal" type="button">律师版</button><button data-edition="finance" type="button">财税版</button></div>
+      <div class="edition-stage reveal" data-edition-stage><div class="edition-copy"><span data-edition-kicker>COMMERCE</span><h3 data-edition-title>从今日经营到内容客服，一条链完成。</h3><p data-edition-description>围绕店铺日常经营组织数据、商品、内容和客服工作；涉及改价、上下架与外发时保留人工确认。</p></div><div class="workflow" data-edition-workflow><span>今日经营</span><i>→</i><span>爆款雷达</span><i>→</i><span>店铺数据</span><i>→</i><span>商品管理</span><i>→</i><span>内容与客服</span></div></div>
+    </section>
+
+    <section class="section-shell section-block open-source" id="open-source">
+      <div class="open-source-panel reveal">
+        <div class="repo-orbit" aria-hidden="true"><span>{ }</span></div>
+        <div class="open-source-copy"><span class="section-index">06 / OPEN SOURCE</span><h2>保留原社区积累，在新账号继续维护 LumiOS。</h2><p>LumiOS 采用 AGPL-3.0 许可证开放源码。旧公开仓库将整体迁移到当前账号，保留已有星标、Fork、Issues、提交历史和社区链接，而不是另建一个丢失积累的空仓库。</p><div class="repo-meta"><span><strong data-star-count>263</strong> stars</span><span>完整 Git 历史</span><span>社区持续共建</span></div><div class="hero-actions"><a class="button button-primary" data-repository href="#" target="_blank" rel="noreferrer">在 GitHub 查看源码 <span>↗</span></a><a class="button button-ghost" data-contact href="#" target="_blank" rel="noreferrer">提交建议</a></div></div>
+      </div>
+    </section>
+
+    <section class="section-shell final-cta reveal"><p>YOUR AI. YOUR MEMORY. YOUR WORKFLOW.</p><h2>从一台电脑开始，拥有真正属于你的 Lumi。</h2><div class="hero-actions"><a class="button button-primary" data-download href="#" target="_blank" rel="noreferrer">下载客户端 <span>↗</span></a><a class="button button-ghost" data-repository href="#" target="_blank" rel="noreferrer">加入开源社区</a></div></section>
+  </main>
+
+  <footer><div class="section-shell footer-inner"><div><a class="brand" href="#top"><span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M5 16.5 14.5 7l2.5 2.5L7.5 19H5v-2.5Z"/></svg></span><span class="brand-copy"><strong>LUMI OS</strong><small>DISTRIBUTED INTELLIGENCE</small></span></a><p>浙江灵序科技有限公司</p></div><div class="footer-links"><a href="#product">产品</a><a href="#vision">核心愿景</a><a href="#industries">行业版本</a><a data-repository href="#" target="_blank" rel="noreferrer">GitHub</a></div><span class="copyright">© <span data-year></span> Lumi AI · 网站源自 LumiOS 原内置官网</span></div></footer>
+</body>
 </html>

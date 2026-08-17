@@ -1,6 +1,6 @@
 param(
   [string]$ConfigPath = "$env:USERPROFILE\.cloudflared\config.yml",
-  [string]$TunnelName = "lumi-website"
+  [string]$TunnelName = "lumi"
 )
 
 $ErrorActionPreference = 'Stop'

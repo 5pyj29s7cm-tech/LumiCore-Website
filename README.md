@@ -10,17 +10,18 @@ npm run check
 npm start
 ```
 
-网站只监听 `127.0.0.1:4173`，健康检查位于 `http://127.0.0.1:4173/healthz`。
+本地预览默认监听 `127.0.0.1:4173`。正式服务通过
+`scripts/start-production.ps1` 监听 `127.0.0.1:80`，健康检查位于
+`http://127.0.0.1:80/healthz`。
 
 ## Cloudflare Tunnel
 
-生产环境使用命名 Tunnel，不使用随机域名的 Quick Tunnel：
+生产环境复用已有的 `lumi` 命名 Tunnel，不创建第二条 Tunnel：
 
 ```powershell
 cloudflared tunnel login
-cloudflared tunnel create lumi-website
-cloudflared tunnel route dns lumi-website lumiai.asia
-cloudflared tunnel route dns lumi-website www.lumiai.asia
+cloudflared tunnel route dns lumi lumiai.asia
+cloudflared tunnel route dns lumi www.lumiai.asia
 ```
 
 复制 `cloudflare/config.example.yml` 到 `%USERPROFILE%\.cloudflared\config.yml`，填写 Tunnel UUID 和凭据路径后运行：
@@ -29,7 +30,7 @@ cloudflared tunnel route dns lumi-website www.lumiai.asia
 .\scripts\start-tunnel.ps1
 ```
 
-Tunnel 只能指向官网端口 `4173`，不要指向 LumiOS 后端端口，也不要把 Cloudflare 凭据提交到 Git。
+Tunnel 只指向官网端口 `80`，不要指向 LumiOS 后端端口，也不要把 Cloudflare 凭据提交到 Git。
 
 ## 修改 GitHub 入口
 

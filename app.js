@@ -1,5 +1,103 @@
 const config = window.LUMI_SITE || {};
 
+const orb = document.querySelector("#lumi-orb");
+if (orb instanceof HTMLCanvasElement) {
+  const context = orb.getContext("2d");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const pointer = { x: 0, y: 0, down: false };
+  const rotation = { x: -0.18, y: 0 };
+  const particleCount = reducedMotion ? 420 : 920;
+  const points = Array.from({ length: particleCount }, (_, index) => {
+    const u = Math.random();
+    const v = Math.random();
+    const theta = Math.PI * 2 * u;
+    const phi = Math.acos(2 * v - 1);
+    const radius = Math.cbrt(Math.random()) * 182;
+    const kind = index % 10 < 4 ? "signal" : index % 10 < 8 ? "core" : "void";
+    return {
+      x: radius * Math.sin(phi) * Math.cos(theta),
+      y: radius * Math.sin(phi) * Math.sin(theta),
+      z: radius * Math.cos(phi),
+      size: .55 + Math.random() * 1.25,
+      kind,
+    };
+  });
+
+  const position = (event) => {
+    const source = event.touches?.[0] || event;
+    return { x: source.clientX, y: source.clientY };
+  };
+  const startDrag = (event) => {
+    Object.assign(pointer, position(event), { down: true });
+    orb.setPointerCapture?.(event.pointerId);
+  };
+  const drag = (event) => {
+    if (!pointer.down) return;
+    const next = position(event);
+    rotation.y += (next.x - pointer.x) * .008;
+    rotation.x -= (next.y - pointer.y) * .008;
+    Object.assign(pointer, next);
+  };
+  const endDrag = () => { pointer.down = false; };
+  orb.addEventListener("pointerdown", startDrag);
+  orb.addEventListener("pointermove", drag);
+  orb.addEventListener("pointerup", endDrag);
+  orb.addEventListener("pointercancel", endDrag);
+
+  const draw = (time = 0) => {
+    if (!context) return;
+    const width = orb.width;
+    const height = orb.height;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    context.clearRect(0, 0, width, height);
+    if (!pointer.down && !reducedMotion) {
+      rotation.y += .0024;
+      rotation.x += .00055;
+    }
+    const sinX = Math.sin(rotation.x);
+    const cosX = Math.cos(rotation.x);
+    const sinY = Math.sin(rotation.y);
+    const cosY = Math.cos(rotation.y);
+    const pulse = reducedMotion ? 0 : Math.sin(time * .0017) * 5;
+    const projected = points.map((point) => {
+      const y1 = point.y * cosX - point.z * sinX;
+      const z1 = point.y * sinX + point.z * cosX;
+      const x2 = point.x * cosY + z1 * sinY;
+      const z2 = -point.x * sinY + z1 * cosY;
+      const length = Math.hypot(point.x, point.y, point.z) || 1;
+      const wave = 1 + pulse / length;
+      const perspective = 520 / (520 - z2);
+      return { ...point, sx: centerX + x2 * wave * perspective, sy: centerY + y1 * wave * perspective, z2, perspective };
+    }).sort((a, b) => a.z2 - b.z2);
+
+    for (const point of projected) {
+      const alpha = Math.max(.12, Math.min(.92, .34 + point.perspective * .38));
+      const size = Math.max(.45, point.size * point.perspective);
+      if (point.kind === "void") {
+        context.strokeStyle = `rgba(255,255,255,${alpha * .25})`;
+        context.lineWidth = .55;
+        context.beginPath();
+        context.arc(point.sx, point.sy, size, 0, Math.PI * 2);
+        context.stroke();
+        continue;
+      }
+      const warm = point.kind === "signal";
+      context.fillStyle = warm ? `rgba(255,77,77,${alpha})` : `rgba(255,255,255,${alpha})`;
+      if (warm && point.z2 > 80) {
+        context.shadowColor = "rgba(255,77,77,.55)";
+        context.shadowBlur = 5;
+      }
+      context.beginPath();
+      context.arc(point.sx, point.sy, size, 0, Math.PI * 2);
+      context.fill();
+      context.shadowBlur = 0;
+    }
+    if (!reducedMotion) requestAnimationFrame(draw);
+  };
+  draw();
+}
+
 const setLinks = (selector, value) => {
   if (!value) return;
   document.querySelectorAll(selector).forEach((node) => node.setAttribute("href", value));

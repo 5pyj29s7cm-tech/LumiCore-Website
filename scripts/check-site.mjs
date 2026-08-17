@@ -10,7 +10,16 @@ required.forEach((file, index) => {
   if (!contents[index].trim()) failures.push(`${file} is empty`);
 });
 const html = contents[0];
-for (const marker of ["data-repository", "data-download", "id=\"open-source\"", "id=\"industries\""]) {
+for (const marker of [
+  "data-repository",
+  "data-download",
+  "id=\"open-source\"",
+  "id=\"industries\"",
+  "id=\"lumi-orb\"",
+  "DISTRIBUTED INTELLIGENCE",
+  "SMART HOST PROGRAM",
+  "创始人圣殿"
+]) {
   if (!html.includes(marker)) failures.push(`index.html is missing ${marker}`);
 }
 if (/\/(api|socket)\b/i.test(html) || /fetch\s*\(\s*["']\/api\//i.test(contents[2])) {

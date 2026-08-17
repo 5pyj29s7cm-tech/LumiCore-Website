@@ -1,0 +1,16 @@
+{
+  "name": "lumios-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "LumiOS official website, intentionally isolated from the LumiOS application runtime.",
+  "scripts": {
+    "dev": "node server.mjs",
+    "start": "node server.mjs",
+    "check": "node scripts/check-site.mjs"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "AGPL-3.0-only"
+}

@@ -1,5 +1,108 @@
 const config = window.LUMI_SITE || {};
 
+const ambientCanvas = document.querySelector("#lumi-ambient");
+if (ambientCanvas instanceof HTMLCanvasElement) {
+  const ambientContext = ambientCanvas.getContext("2d");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const pointer = { x: .72, y: .2, targetX: .72, targetY: .2 };
+  let width = 0;
+  let height = 0;
+  let pixelRatio = 1;
+  let lastFrame = -Infinity;
+
+  const resizeAmbient = () => {
+    pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    ambientCanvas.width = Math.round(width * pixelRatio);
+    ambientCanvas.height = Math.round(height * pixelRatio);
+    ambientContext?.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+  };
+
+  const lightField = (x, y, radius, stretch, rotation, color) => {
+    if (!ambientContext) return;
+    ambientContext.save();
+    ambientContext.translate(x, y);
+    ambientContext.rotate(rotation);
+    ambientContext.scale(1, stretch);
+    const gradient = ambientContext.createRadialGradient(0, 0, 0, 0, 0, radius);
+    gradient.addColorStop(0, color);
+    gradient.addColorStop(.42, color.replace(/[\d.]+\)$/, ".08)"));
+    gradient.addColorStop(1, "rgba(0,0,0,0)");
+    ambientContext.fillStyle = gradient;
+    ambientContext.beginPath();
+    ambientContext.arc(0, 0, radius, 0, Math.PI * 2);
+    ambientContext.fill();
+    ambientContext.restore();
+  };
+
+  const drawAmbient = (time = 0) => {
+    if (!ambientContext) return;
+    if (!reducedMotion && time - lastFrame < 32) {
+      requestAnimationFrame(drawAmbient);
+      return;
+    }
+    lastFrame = time;
+    pointer.x += (pointer.targetX - pointer.x) * .025;
+    pointer.y += (pointer.targetY - pointer.y) * .025;
+    ambientContext.clearRect(0, 0, width, height);
+    ambientContext.globalCompositeOperation = "screen";
+
+    const phase = reducedMotion ? 0 : time * .00016;
+    const scrollPhase = Math.min(window.scrollY / Math.max(height, 1), 2.5);
+    const focusX = width * (pointer.x + Math.sin(phase * 2.1) * .06);
+    const focusY = height * (pointer.y + Math.cos(phase * 1.4) * .045) - scrollPhase * 26;
+    lightField(focusX, focusY, Math.max(width, height) * .56, .22, -.42 + Math.sin(phase) * .09, "rgba(255,190,112,.19)");
+    lightField(width * (.18 + Math.sin(phase * 1.7) * .05), height * .52, Math.max(width, height) * .48, .18, .34, "rgba(102,205,221,.10)");
+    lightField(width * (.52 + Math.cos(phase * 1.15) * .09), height * .78, Math.max(width, height) * .42, .14, -.18, "rgba(137,113,255,.065)");
+
+    ambientContext.lineWidth = 1;
+    for (let index = 0; index < 5; index += 1) {
+      const offset = index * height * .13;
+      ambientContext.beginPath();
+      ambientContext.moveTo(-width * .12, height * .18 + offset);
+      ambientContext.bezierCurveTo(
+        width * .22,
+        height * (.02 + index * .08 + Math.sin(phase * 2 + index) * .05),
+        width * .62,
+        height * (.38 + index * .05 + Math.cos(phase * 1.6 + index) * .06),
+        width * 1.12,
+        height * (.08 + index * .1),
+      );
+      ambientContext.strokeStyle = index % 2 ? "rgba(255,205,135,.055)" : "rgba(166,218,226,.045)";
+      ambientContext.shadowColor = index % 2 ? "rgba(255,183,93,.16)" : "rgba(99,199,220,.12)";
+      ambientContext.shadowBlur = 24;
+      ambientContext.stroke();
+    }
+    ambientContext.shadowBlur = 0;
+
+    const gridSize = width < 700 ? 38 : 48;
+    const gridTop = height * .08;
+    const gridBottom = height * .6;
+    for (let y = gridTop; y < gridBottom; y += gridSize) {
+      for (let x = gridSize; x < width; x += gridSize) {
+        const wave = (Math.sin(x * .012 + y * .009 + phase * 7) + 1) * .5;
+        const distance = Math.hypot(x - focusX, y - focusY);
+        const focus = Math.max(0, 1 - distance / (width * .56));
+        const alpha = .012 + wave * focus * .055;
+        ambientContext.fillStyle = `rgba(230,236,244,${alpha})`;
+        ambientContext.fillRect(x, y, 1, 1);
+      }
+    }
+
+    ambientContext.globalCompositeOperation = "source-over";
+    if (!reducedMotion) requestAnimationFrame(drawAmbient);
+  };
+
+  resizeAmbient();
+  window.addEventListener("resize", resizeAmbient, { passive: true });
+  window.addEventListener("pointermove", (event) => {
+    pointer.targetX = event.clientX / Math.max(window.innerWidth, 1);
+    pointer.targetY = event.clientY / Math.max(window.innerHeight, 1);
+  }, { passive: true });
+  drawAmbient();
+}
+
 const orb = document.querySelector("#lumi-orb");
 if (orb instanceof HTMLCanvasElement) {
   const context = orb.getContext("2d");
@@ -75,7 +178,7 @@ if (orb instanceof HTMLCanvasElement) {
       const alpha = Math.max(.12, Math.min(.92, .34 + point.perspective * .38));
       const size = Math.max(.45, point.size * point.perspective);
       if (point.kind === "void") {
-        context.strokeStyle = `rgba(255,255,255,${alpha * .25})`;
+        context.strokeStyle = `rgba(101,220,230,${alpha * .24})`;
         context.lineWidth = .55;
         context.beginPath();
         context.arc(point.sx, point.sy, size, 0, Math.PI * 2);
@@ -83,9 +186,9 @@ if (orb instanceof HTMLCanvasElement) {
         continue;
       }
       const warm = point.kind === "signal";
-      context.fillStyle = warm ? `rgba(255,77,77,${alpha})` : `rgba(255,255,255,${alpha})`;
+      context.fillStyle = warm ? `rgba(255,112,65,${alpha})` : `rgba(255,255,255,${alpha})`;
       if (warm && point.z2 > 80) {
-        context.shadowColor = "rgba(255,77,77,.55)";
+        context.shadowColor = "rgba(255,112,65,.55)";
         context.shadowBlur = 5;
       }
       context.beginPath();
@@ -106,6 +209,92 @@ const setLinks = (selector, value) => {
 setLinks("[data-repository]", config.repository);
 setLinks("[data-contact]", config.contact || config.repository);
 document.querySelectorAll("[data-year]").forEach((node) => { node.textContent = new Date().getFullYear(); });
+if (config.supportEmail) {
+  document.querySelectorAll("[data-support-email]").forEach((node) => {
+    node.setAttribute("href", `mailto:${config.supportEmail}?subject=${encodeURIComponent("LumiAI 合作咨询")}`);
+  });
+  document.querySelectorAll("[data-support-email-text]").forEach((node) => { node.textContent = config.supportEmail; });
+}
+if (config.businessWechat) {
+  document.querySelectorAll("[data-wechat-id]").forEach((node) => { node.textContent = config.businessWechat; });
+}
+
+const pages = new Set(["home", "ecosystem", "products", "industry", "vision", "docs", "contact", "join", "product-detail"]);
+const pageTitles = {
+  home: "LumiAI · 分布式智能，从本地开始",
+  ecosystem: "Lumi 生态 · LumiAI",
+  products: "多模态产品 · LumiAI",
+  industry: "行业方案 · LumiAI",
+  vision: "核心愿景 · LumiAI",
+  docs: "文档与源码 · LumiAI",
+  contact: "合作联系 · LumiAI",
+  join: "加入我们 · LumiAI",
+  "product-detail": "产品详情 · LumiAI",
+};
+
+const routeFromHash = () => {
+  const path = window.location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  if (path[0] === "product" && path[1]) return { page: "product-detail", productId: path[1] };
+  return { page: pages.has(path[0]) ? path[0] : "home" };
+};
+
+const populateProductDetail = (productId) => {
+  const card = document.querySelector(`[data-product-id="${CSS.escape(productId)}"]`);
+  const detail = document.querySelector("[data-product-detail]");
+  if (!card || !detail) return false;
+  const name = card.querySelector("h3")?.textContent?.trim() || "Lumi 产品";
+  detail.querySelector("[data-detail-category]").textContent = card.querySelector(".product-meta span")?.textContent || "LUMI PRODUCT";
+  detail.querySelector("[data-detail-name]").textContent = name;
+  detail.querySelector("[data-detail-description]").textContent = card.querySelector(":scope > p")?.textContent || "";
+  detail.querySelector("[data-detail-price]").textContent = card.querySelector(".product-meta strong")?.textContent || "";
+  detail.querySelector("[data-detail-specs]").innerHTML = [...card.querySelectorAll("li")].map((item) => `<li>${item.textContent}</li>`).join("");
+  const visual = card.querySelector(".product-visual")?.cloneNode(true);
+  detail.querySelector("[data-detail-visual]").replaceChildren(...(visual ? [visual] : []));
+  document.title = `${name} · LumiAI`;
+  return true;
+};
+
+const renderRoute = () => {
+  let route = routeFromHash();
+  if (route.page === "product-detail" && !populateProductDetail(route.productId)) route = { page: "products" };
+  document.querySelectorAll("[data-page]").forEach((node) => {
+    const active = node.dataset.page === route.page;
+    node.hidden = !active;
+  });
+  document.querySelectorAll("[data-page-link]").forEach((link) => {
+    const active = link.dataset.pageLink === route.page || (route.page === "product-detail" && link.dataset.pageLink === "products");
+    link.classList.toggle("active", active);
+    if (active) link.setAttribute("aria-current", "page"); else link.removeAttribute("aria-current");
+  });
+  if (route.page !== "product-detail") document.title = pageTitles[route.page] || pageTitles.home;
+  document.body.dataset.activePage = route.page;
+  window.scrollTo({ top: 0, behavior: "instant" });
+};
+
+window.addEventListener("hashchange", renderRoute);
+
+document.querySelectorAll("[data-copy-wechat]").forEach((button) => button.addEventListener("click", async () => {
+  const status = button.closest(".contact-method")?.querySelector("[data-copy-status]");
+  const value = String(config.businessWechat || "").trim();
+  if (!value) return;
+  try {
+    await navigator.clipboard.writeText(value);
+    button.textContent = "已复制";
+    if (status) status.textContent = "微信号已复制到剪贴板";
+  } catch {
+    const input = document.createElement("textarea");
+    input.value = value;
+    input.style.position = "fixed";
+    input.style.opacity = "0";
+    document.body.append(input);
+    input.select();
+    const copied = document.execCommand("copy");
+    input.remove();
+    button.textContent = copied ? "已复制" : "复制失败";
+    if (status) status.textContent = copied ? "微信号已复制到剪贴板" : `请手动复制：${value}`;
+  }
+  window.setTimeout(() => { button.textContent = "复制微信号"; }, 1800);
+}));
 
 const header = document.querySelector("[data-header]");
 const updateHeader = () => header?.classList.toggle("scrolled", window.scrollY > 20);
@@ -129,8 +318,37 @@ const observer = new IntersectionObserver((entries) => {
     entry.target.classList.add("visible");
     observer.unobserve(entry.target);
   });
-}, { threshold: 0.12 });
+}, { threshold: 0.01, rootMargin: "0px 0px 7% 0px" });
 document.querySelectorAll(".reveal").forEach((node) => observer.observe(node));
+
+const productGrid = document.querySelector("[data-product-grid]");
+const productFilters = document.querySelectorAll("[data-product-filter]");
+productFilters.forEach((button) => button.addEventListener("click", () => {
+  const category = button.dataset.productFilter;
+  productFilters.forEach((item) => item.classList.toggle("active", item === button));
+  productGrid?.querySelectorAll("[data-product-category]").forEach((card) => {
+    card.hidden = category !== "all" && card.dataset.productCategory !== category;
+  });
+  const partner = productGrid?.querySelector(".product-partner-card");
+  if (partner) partner.hidden = category !== "all";
+  productGrid?.animate(
+    [{ opacity: .45, transform: "translateY(5px)" }, { opacity: 1, transform: "none" }],
+    { duration: 260, easing: "ease-out" },
+  );
+}));
+
+document.querySelectorAll("[data-product-id]").forEach((card) => {
+  const open = () => { window.location.hash = `#/product/${card.dataset.productId}`; };
+  card.addEventListener("click", open);
+  card.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    open();
+  });
+});
+document.querySelectorAll("[data-product-back]").forEach((button) => button.addEventListener("click", () => {
+  window.location.hash = "#/products";
+}));
 
 const editions = {
   commerce: {
@@ -183,3 +401,8 @@ if (config.repositoryApi) {
       document.querySelectorAll("[data-star-count]").forEach((node) => { node.textContent = Number(config.fallbackStars || 0).toLocaleString("zh-CN"); });
     });
 }
+
+if (!window.location.hash || window.location.hash === "#") {
+  history.replaceState(null, "", "#/home");
+}
+renderRoute();

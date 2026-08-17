@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
@@ -12,10 +12,22 @@ required.forEach((file, index) => {
 const html = contents[0];
 for (const marker of [
   "data-repository",
+  "data-page=\"home\"",
+  "data-page=\"ecosystem\"",
+  "data-page=\"products\"",
+  "data-page=\"industry\"",
+  "data-page=\"vision\"",
+  "data-page=\"docs\"",
+  "data-page=\"contact\"",
+  "data-page=\"join\"",
+  "data-page=\"product-detail\"",
+  "data-client-video",
+  "assets/lumi-client-command-center.mp4",
   "id=\"open-source\"",
   "id=\"industry\"",
   "id=\"products\"",
   "id=\"lumi-orb\"",
+  "id=\"lumi-ambient\"",
   "DISTRIBUTED INTELLIGENCE",
   "SMART HOST PROGRAM",
   "FOUNDER'S SANCTUARY",
@@ -28,6 +40,25 @@ for (const marker of [
   "桌面手机机器人"
 ]) {
   if (!html.includes(marker)) failures.push(`index.html is missing ${marker}`);
+}
+for (const route of ["#/home", "#/ecosystem", "#/products", "#/industry", "#/vision", "#/docs", "#/contact", "#/join"]) {
+  if (!html.includes(route)) failures.push(`index.html is missing page route ${route}`);
+}
+const heroActions = html.match(/<div class="hero-actions hero-entry-actions">([\s\S]*?)<\/div>/)?.[1] || "";
+if (!heroActions || heroActions.indexOf("data-repository") > heroActions.indexOf("开发者文档")) {
+  failures.push("homepage must present GitHub as the first primary action");
+}
+if (!contents[2].includes("repositoryApi") || !contents[2].includes("stargazers_count")) {
+  failures.push("GitHub star count must continue to update from the repository API");
+}
+if (!contents[2].includes("hashchange") || !contents[2].includes("data-product-detail")) {
+  failures.push("website must preserve page routing and product detail navigation");
+}
+if (!contents[2].includes("drawAmbient") || !contents[1].includes("ambient-canvas")) {
+  failures.push("homepage must preserve the animated ambient background");
+}
+if (!contents[3].includes("supportEmail") || !contents[3].includes("businessWechat")) {
+  failures.push("verified business contact details must remain centrally configured");
 }
 
 const expectedProducts = [
@@ -52,6 +83,13 @@ if (/data-download|releases\.lumiai\.asia|\/releases(?:[\"'#?]|$)/i.test(content
 }
 if (/\/(api|socket)\b/i.test(html) || /fetch\s*\(\s*["']\/api\//i.test(contents[2])) {
   failures.push("website must not call the Lumi application backend");
+}
+if (/data-demo|demo-light-active/.test(contents.join("\n"))) {
+  failures.push("legacy fake demo behavior must be removed");
+}
+for (const asset of ["assets/lumi-client-command-center.mp4", "assets/lumi-client-poster.webp"]) {
+  try { await access(new URL(`../${asset}`, import.meta.url)); }
+  catch { failures.push(`real client media is missing ${asset}`); }
 }
 
 if (failures.length) {

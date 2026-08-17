@@ -17,11 +17,12 @@ const mime = new Map([
   [".svg", "image/svg+xml"],
   [".png", "image/png"],
   [".webp", "image/webp"],
+  [".mp4", "video/mp4"],
   [".ico", "image/x-icon"]
 ]);
 
 const commonHeaders = {
-  "Content-Security-Policy": "default-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data:; style-src 'self'; script-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'; object-src 'none'",
+  "Content-Security-Policy": "default-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data:; media-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'; object-src 'none'",
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "X-Content-Type-Options": "nosniff",
   "X-Frame-Options": "DENY",

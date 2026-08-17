@@ -12,15 +12,17 @@ required.forEach((file, index) => {
 const html = contents[0];
 for (const marker of [
   "data-repository",
-  "data-download",
   "id=\"open-source\"",
-  "id=\"industries\"",
+  "id=\"industry\"",
   "id=\"lumi-orb\"",
   "DISTRIBUTED INTELLIGENCE",
   "SMART HOST PROGRAM",
-  "创始人圣殿"
+  "FOUNDER'S SANCTUARY"
 ]) {
   if (!html.includes(marker)) failures.push(`index.html is missing ${marker}`);
+}
+if (/data-download|releases\.lumiai\.asia|\/releases(?:[\"'#?]|$)/i.test(contents.join("\n"))) {
+  failures.push("source-only website must not expose installer or release links");
 }
 if (/\/(api|socket)\b/i.test(html) || /fetch\s*\(\s*["']\/api\//i.test(contents[2])) {
   failures.push("website must not call the Lumi application backend");

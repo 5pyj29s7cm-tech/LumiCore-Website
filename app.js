@@ -104,7 +104,6 @@ const setLinks = (selector, value) => {
 };
 
 setLinks("[data-repository]", config.repository);
-setLinks("[data-download]", config.download || config.releases);
 setLinks("[data-contact]", config.contact || config.repository);
 document.querySelectorAll("[data-year]").forEach((node) => { node.textContent = new Date().getFullYear(); });
 

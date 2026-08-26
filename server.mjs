@@ -43,7 +43,7 @@ const server = createServer((req, res) => {
 
   const requestUrl = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
   if (requestUrl.pathname === "/healthz") {
-    send(res, 200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }, JSON.stringify({ ok: true, service: "lumios-website" }));
+    send(res, 200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }, JSON.stringify({ ok: true, service: "lumicore-website" }));
     return;
   }
 
@@ -66,7 +66,7 @@ const server = createServer((req, res) => {
 });
 
 server.listen(port, host, () => {
-  console.log(`[lumios-website] listening on http://${host}:${port}`);
+  console.log(`[lumicore-website] listening on http://${host}:${port}`);
 });
 
 const shutdown = () => server.close(() => process.exit(0));

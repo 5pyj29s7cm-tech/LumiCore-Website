@@ -1,13 +1,13 @@
-# LumiOS Website
+# LumiCore Website
 
-LumiOS 官方网站的独立静态源码树。它与 LumiOS 桌面客户端、后端、记忆数据库和用户密钥分离，当前本机目录本身是一个独立 Git 仓库，但尚未配置独立的 GitHub 远程仓库。
+LumiCore 官方网站的独立静态源码树。它与 LumiCore 桌面客户端、后端、记忆数据库和用户密钥分离，本机目录和 GitHub 远程都保持为独立仓库。
 
-官网以原 LumiAI 官网的信息架构为主体，保留智能宿主计划、全息载体、分布式心智、多模态产品、核心愿景与生态内容；LumiOS 开源仓库作为补充入口，不替代原有产品内容。多模态产品数据静态保存在站点内，不依赖 LumiOS 应用后端。
+官网以原 LumiAI 官网的信息架构为主体，保留智能宿主计划、全息载体、分布式心智、多模态产品、核心愿景与生态内容；LumiCore 开源仓库作为补充入口，不替代原有产品内容。多模态产品数据静态保存在站点内，不依赖 LumiCore 应用后端。
 
 ## 本机运行
 
 ```powershell
-cd D:\LumiOS-Website
+cd D:\LumiCore-Website
 npm run check
 npm start
 ```
@@ -32,7 +32,7 @@ cloudflared tunnel route dns lumi www.lumiai.asia
 .\scripts\start-tunnel.ps1
 ```
 
-Tunnel 只指向官网端口 `80`，不要指向 LumiOS 后端端口，也不要把 Cloudflare 凭据提交到 Git。
+Tunnel 只指向官网端口 `80`，不要指向 LumiCore 后端端口，也不要把 Cloudflare 凭据提交到 Git。
 
 ## 修改 GitHub 入口
 
@@ -40,4 +40,4 @@ Tunnel 只指向官网端口 `80`，不要指向 LumiOS 后端端口，也不要
 
 ## 许可证
 
-站点代码采用 AGPL-3.0-only，与 LumiOS 主程序保持一致。Lumi、LumiOS 名称及视觉标识归浙江灵序科技有限公司所有。
+站点代码采用 AGPL-3.0-only，与 LumiCore 主程序保持一致。Lumi、LumiCore 名称及视觉标识归浙江灵序科技有限公司所有。

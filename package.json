@@ -1,9 +1,9 @@
 {
-  "name": "lumios-website",
+  "name": "lumicore-website",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "LumiOS official website, intentionally isolated from the LumiOS application runtime.",
+  "description": "LumiCore official website, intentionally isolated from the LumiCore application runtime.",
   "scripts": {
     "dev": "node server.mjs",
     "start": "node server.mjs",

@@ -4,12 +4,18 @@ import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const required = ["index.html", "styles.css", "app.js", "site-config.js", "server.mjs"];
 const contents = await Promise.all(required.map((file) => readFile(new URL(`../${file}`, import.meta.url), "utf8")));
+const packageJson = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
 
 const failures = [];
 required.forEach((file, index) => {
   if (!contents[index].trim()) failures.push(`${file} is empty`);
 });
 const html = contents[0];
+const publicSiteSource = contents.join('\n');
+if (packageJson.name !== 'lumicore-website') failures.push('package name must be lumicore-website');
+if (!html.includes('LumiCore')) failures.push('public website must present the LumiCore product name');
+if (!contents[3].includes('5pyj29s7cm-tech/LumiCore')) failures.push('website repository links must target LumiCore');
+if (/LumiOS|Lumi OS|lumi-os/i.test(publicSiteSource)) failures.push('public website still exposes the legacy LumiOS brand');
 for (const marker of [
   "data-repository",
   "data-page=\"home\"",

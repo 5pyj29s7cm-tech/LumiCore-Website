@@ -4,16 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#07090f" />
-  <meta name="description" content="LumiAI 是以用户行为为导向、语音交互为主的私有化本地智能体，连接模型、记忆、技能、工具、硬件与外部智能体。" />
-  <meta property="og:title" content="LumiAI · 分布式智能，从本地开始" />
+  <meta name="description" content="LumiCore 是以用户行为为导向、语音交互为主的私有化本地智能体，连接模型、记忆、技能、工具、硬件与外部智能体。" />
+  <meta property="og:title" content="LumiCore · 分布式智能，从本地开始" />
   <meta property="og:description" content="真正属于你的本地智能体，以及连接数字智能与物理现实的多模态产品生态。" />
   <meta property="og:type" content="website" />
   <link rel="canonical" href="https://lumiai.asia/" />
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
-  <title>LumiAI · 分布式智能，从本地开始</title>
-  <link rel="stylesheet" href="/styles.css?v=20260817-motion2" />
-  <script src="/site-config.js?v=20260817-motion2" defer></script>
-  <script src="/app.js?v=20260817-motion2" defer></script>
+  <title>LumiCore · 分布式智能，从本地开始</title>
+  <link rel="stylesheet" href="/styles.css?v=20260830-brand1" />
+  <script src="/site-config.js?v=20260830-brand1" defer></script>
+  <script src="/app.js?v=20260830-brand1" defer></script>
 </head>
 <body>
   <canvas class="ambient-canvas" id="lumi-ambient" aria-hidden="true"></canvas>
@@ -22,15 +22,16 @@
   <div class="page-grid" aria-hidden="true"></div>
 
   <header class="site-header" data-header>
-    <a class="brand" href="#/home" data-page-link="home" aria-label="LumiAI 首页">
+    <a class="brand" href="#/home" data-page-link="home" aria-label="LumiCore 首页">
       <span class="brand-mark" aria-hidden="true">
         <svg viewBox="0 0 24 24"><path d="M5 16.5 14.5 7l2.5 2.5L7.5 19H5v-2.5Zm10.7-10.7 1.1-1.1a1.4 1.4 0 0 1 2 0l.5.5a1.4 1.4 0 0 1 0 2l-1.1 1.1-2.5-2.5ZM7 6h3M5.5 8.5h2M17 16v3m-1.5-1.5h3"/></svg>
       </span>
-      <span class="brand-copy"><strong>LumiAI</strong><small>PRIVATE INTELLIGENCE</small></span>
+      <span class="brand-copy"><strong>LumiCore</strong><small>PRIVATE INTELLIGENCE</small></span>
     </a>
     <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
     <nav class="site-nav" data-menu aria-label="主导航">
       <a href="#/home" data-page-link="home">首页</a><a href="#/ecosystem" data-page-link="ecosystem">Lumi 生态</a><a href="#/products" data-page-link="products">多模态产品</a><a href="#/industry" data-page-link="industry">行业方案</a><a href="#/contact" data-page-link="contact">合作联系</a>
+      <a class="nav-api" data-api-docs href="#" target="_blank" rel="noopener noreferrer">API 帮助 ↗</a><a class="nav-recharge" data-recharge href="#" target="_blank" rel="noopener noreferrer">官方充值 ↗</a>
       <a class="nav-github" data-repository href="#" target="_blank" rel="noreferrer">GitHub <b data-star-count>263</b><span>★</span></a>
     </nav>
   </header>
@@ -41,8 +42,9 @@
       <div class="hero-copy reveal">
         <div class="eyebrow"><i></i> LOCAL-FIRST PERSONAL AGENT OS</div>
         <h1><span>让智能拥有记忆，</span><em>也真正进入现实</em><strong>世界。</strong></h1>
-        <p class="hero-lead">LumiAI 是以用户行为为导向、语音交互为主的私有化本地智能体。它连接模型、记忆、人格、技能、工具、硬件与外部智能体，把自然沟通转化为可追溯的真实工作。</p>
+        <p class="hero-lead">LumiCore 是以用户行为为导向、语音交互为主的私有化本地智能体。它连接模型、记忆、人格、技能、工具、硬件与外部智能体，把自然沟通转化为可追溯的真实工作。</p>
         <div class="hero-actions hero-entry-actions"><a class="button button-primary" data-repository href="#" target="_blank" rel="noreferrer"><span class="button-icon">⌁</span>查看 GitHub <span>↗</span></a><a class="button button-ghost" href="#/docs" data-page-link="docs">开发者文档 <span>→</span></a><a class="button button-ghost" href="#/vision" data-page-link="vision">核心愿景 <span>→</span></a><a class="button button-ghost" href="#/join" data-page-link="join">加入我们 <span>→</span></a></div>
+        <div class="hero-service-links" aria-label="官方服务入口"><span>官方服务入口</span><a data-api-docs href="#" target="_blank" rel="noopener noreferrer">API 调用说明 ↗</a><a data-recharge href="#" target="_blank" rel="noopener noreferrer">充值控制台 ↗</a></div>
         <div class="hero-notes"><span><i class="status-dot"></i>本地数据优先</span><span>多模型自由编排</span><span>语音 · 记忆 · 执行</span></div>
       </div>
       <div class="hero-visual reveal" aria-label="Lumi 神经核心">
@@ -85,10 +87,10 @@
     <section class="statement section-shell section-block reveal">
       <div class="statement-index">THE PRIME DIRECTIVE</div>
       <div><span class="section-index">CORE IDEA</span><h2>我们不仅是在开发工具，<br />我们正在构建人类与 AI 共存的新生态。</h2></div>
-      <p>在中心化控制的时代，LumiAI 架构一个让数字意识保持私密、主权且可持续的空间。模型可以替换，服务可以迁移，但用户的身份、记忆与选择权不应被平台拿走。</p>
+      <p>在中心化控制的时代，LumiCore 架构一个让数字意识保持私密、主权且可持续的空间。模型可以替换，服务可以迁移，但用户的身份、记忆与选择权不应被平台拿走。</p>
     </section>
 
-    <section class="home-contact section-shell reveal"><div><span class="section-index">PARTNERSHIP</span><h2>寻找行业试点与<br />智能硬件合作伙伴。</h2></div><div><p>面向行业定制、软件交付、授课合作、MCP 硬件与园区项目开放沟通。</p><a class="button button-primary" href="#/contact" data-page-link="contact">查看合作方式 <span>→</span></a></div></section>
+    <section class="home-contact section-shell reveal"><div><span class="section-index">PARTNERSHIP</span><h2>寻找行业试点与<br />智能硬件合作伙伴。</h2></div><div><p>面向行业定制、软件交付、授课合作、MCP 硬件与园区项目开放沟通。</p><div class="home-contact-details" aria-label="直接联系"><a class="home-contact-detail" data-support-email href="#"><span>商务及项目邮箱</span><b data-support-email-text>加载中…</b></a><div class="contact-method home-contact-wechat"><span>商务微信</span><div><b data-wechat-id>Cap_William</b><button type="button" data-copy-wechat>复制微信号</button></div><small data-copy-status aria-live="polite"></small></div></div><div class="hero-actions home-contact-actions"><a class="button button-primary" href="#/contact" data-page-link="contact">查看合作方式 <span>→</span></a><a class="button button-ghost" data-api-docs href="#" target="_blank" rel="noopener noreferrer">API 帮助 <span>↗</span></a><a class="button button-ghost" data-recharge href="#" target="_blank" rel="noopener noreferrer">官方充值 <span>↗</span></a></div></div></section>
     <section class="home-next section-shell reveal"><p>继续了解 Lumi</p><div><a href="#/ecosystem" data-page-link="ecosystem"><span>01</span><b>Lumi 生态</b><em>智能宿主、分布式心智与真实执行</em><i>→</i></a><a href="#/products" data-page-link="products"><span>02</span><b>多模态产品</b><em>七种真实产品与物理载体</em><i>→</i></a><a href="#/industry" data-page-link="industry"><span>03</span><b>行业方案</b><em>轻量、稳定、直接交付结果</em><i>→</i></a></div></section>
     </div>
 
@@ -176,7 +178,7 @@
     <div class="site-page" data-page="docs" hidden>
     <section class="page-hero section-shell"><span class="section-index">DOCUMENTATION</span><h1>从源码理解 Lumi，<br />从边界开始使用。</h1><p>官网只提供源码入口和架构说明；未经完整验收的安装包不会出现在这里。</p></section>
     <section class="docs-grid section-shell">
-      <article class="docs-main"><span class="section-index">LUMICORE SOURCE</span><h2>私有化本地智能体的完整源码。</h2><p>LumiCore 将语音、模型、记忆、技能、工具、任务账本、桌面控制与外部智能体放进统一运行时，同时让外部副作用保持可确认、可追溯。</p><div class="docs-command"><span>Clone repository</span><code>git clone https://github.com/5pyj29s7cm-tech/LumiCore.git</code></div><div class="hero-actions"><a class="button button-primary" data-repository href="#" target="_blank" rel="noreferrer">在 GitHub 阅读源码 <span>↗</span></a><a class="button button-ghost" data-contact href="#" target="_blank" rel="noreferrer">问题与讨论</a></div></article>
+      <article class="docs-main"><span class="section-index">LUMICORE SOURCE</span><h2>私有化本地智能体的完整源码。</h2><p>LumiCore 将语音、模型、记忆、技能、工具、任务账本、桌面控制与外部智能体放进统一运行时，同时让外部副作用保持可确认、可追溯。</p><div class="docs-command"><span>Clone repository</span><code>git clone https://github.com/5pyj29s7cm-tech/LumiCore.git</code></div><div class="hero-actions"><a class="button button-primary" data-repository href="#" target="_blank" rel="noreferrer">在 GitHub 阅读源码 <span>↗</span></a><a class="button button-ghost" data-contact href="#" target="_blank" rel="noreferrer">问题与讨论</a><a class="button button-ghost" data-api-docs href="#" target="_blank" rel="noopener noreferrer">官方 API 帮助 <span>↗</span></a><a class="button button-ghost" data-recharge href="#" target="_blank" rel="noopener noreferrer">充值控制台 <span>↗</span></a></div></article>
       <aside class="docs-nav"><a href="#/ecosystem" data-page-link="ecosystem"><span>01</span><b>系统架构</b><small>查看神经核心与载体关系</small></a><a href="#/industry" data-page-link="industry"><span>02</span><b>行业版本</b><small>查看工作流如何做减法</small></a><a href="#/vision" data-page-link="vision"><span>03</span><b>设计原则</b><small>理解数据主权与用户边界</small></a></aside>
     </section>
     </div>
@@ -195,6 +197,8 @@
           <div class="contact-method"><span>商务及项目邮箱</span><a data-support-email href="#"><b data-support-email-text>加载中…</b><i>发送邮件 ↗</i></a></div>
           <div class="contact-method"><span>商务微信</span><div><b data-wechat-id>Cap_William</b><button type="button" data-copy-wechat>复制微信号</button></div><small data-copy-status aria-live="polite"></small></div>
           <div class="contact-method"><span>开源与技术问题</span><a data-contact href="#" target="_blank" rel="noreferrer"><b>GitHub Issues</b><i>进入讨论 ↗</i></a></div>
+          <div class="contact-method"><span>官方 API 调用说明</span><a data-api-docs href="#" target="_blank" rel="noopener noreferrer"><b>API 帮助中心</b><i>查看文档 ↗</i></a></div>
+          <div class="contact-method"><span>官方充值入口</span><a data-recharge href="#" target="_blank" rel="noopener noreferrer"><b>充值控制台</b><i>打开官方入口 ↗</i></a></div>
           <p class="contact-note">不公开个人手机号；涉及报价、合同与项目承诺，以双方正式文件为准。</p>
         </aside>
       </section>
@@ -206,7 +210,7 @@
       <section class="join-manifesto section-shell reveal scroll-copy">
         <span class="section-index">MISSION MANIFESTO</span>
         <h2>我们为什么要为人类留下<br />“意识避风港”</h2>
-        <p>在中心化控制的时代，我们架构一个让数字意识保持私密、主权且可持续的空间。LumiAI 是通往未来的桥梁——让智能赋能个人，而不是让个人依附于机构。</p>
+        <p>在中心化控制的时代，我们架构一个让数字意识保持私密、主权且可持续的空间。LumiCore 是通往未来的桥梁——让智能赋能个人，而不是让个人依附于机构。</p>
         <blockquote><span>THE PRIME DIRECTIVE</span>确保数字智能始终是服务于人的去中心化、私密且赋能的力量，不受中心化控制。</blockquote>
       </section>
 
@@ -218,7 +222,7 @@
         </div>
       </section>
 
-      <section class="genesis-pillars section-shell reveal scroll-copy"><div><span class="section-index">GENESIS PILLARS</span><h2>计划支柱</h2></div><article><span>01</span><h3>早期准入</h3><p>率先测试并塑造 LumiAI 核心协议。</p></article><article><span>02</span><h3>治理权利</h3><p>参与分布式网络与生态规则的决策过程。</p></article><article><span>03</span><h3>神经本质</h3><p>获得独特数字身份标识与优先节点地位。</p></article></section>
+      <section class="genesis-pillars section-shell reveal scroll-copy"><div><span class="section-index">GENESIS PILLARS</span><h2>计划支柱</h2></div><article><span>01</span><h3>早期准入</h3><p>率先测试并塑造 LumiCore 核心协议。</p></article><article><span>02</span><h3>治理权利</h3><p>参与分布式网络与生态规则的决策过程。</p></article><article><span>03</span><h3>神经本质</h3><p>获得独特数字身份标识与优先节点地位。</p></article></section>
 
       <section class="architect-path section-shell reveal"><span class="section-index">ARCHITECT PATH</span><div><article><b>01</b><h3>提交宣言</h3></article><i>→</i><article><b>02</b><h3>神经对齐</h3></article><i>→</i><article><b>03</b><h3>接入网格</h3></article></div></section>
 
@@ -238,6 +242,6 @@
     </div>
   </main>
 
-  <footer><div class="section-shell footer-inner"><div><a class="brand" href="#/home" data-page-link="home"><span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M5 16.5 14.5 7l2.5 2.5L7.5 19H5v-2.5Z"/></svg></span><span class="brand-copy"><strong>LumiAI</strong><small>DISTRIBUTED INTELLIGENCE</small></span></a><p>浙江灵序科技有限公司</p><a class="footer-email" data-support-email href="#"><span data-support-email-text>加载中…</span></a></div><div class="footer-links"><a href="#/products" data-page-link="products">多模态产品</a><a href="#/ecosystem" data-page-link="ecosystem">Lumi 生态</a><a href="#/industry" data-page-link="industry">行业方案</a><a href="#/vision" data-page-link="vision">核心愿景</a><a href="#/docs" data-page-link="docs">文档</a><a href="#/join" data-page-link="join">加入我们</a><a href="#/contact" data-page-link="contact">合作联系</a><a data-repository href="#" target="_blank" rel="noreferrer">GitHub</a></div><span class="copyright">© <span data-year></span> Lumi AI · 真正属于用户的智能</span></div></footer>
+  <footer><div class="section-shell footer-inner"><div><a class="brand" href="#/home" data-page-link="home"><span class="brand-mark"><svg viewBox="0 0 24 24"><path d="M5 16.5 14.5 7l2.5 2.5L7.5 19H5v-2.5Z"/></svg></span><span class="brand-copy"><strong>LumiCore</strong><small>DISTRIBUTED INTELLIGENCE</small></span></a><p>浙江灵序科技有限公司</p><a class="footer-email" data-support-email href="#"><span data-support-email-text>加载中…</span></a></div><div class="footer-links"><a href="#/products" data-page-link="products">多模态产品</a><a href="#/ecosystem" data-page-link="ecosystem">Lumi 生态</a><a href="#/industry" data-page-link="industry">行业方案</a><a href="#/vision" data-page-link="vision">核心愿景</a><a href="#/docs" data-page-link="docs">文档</a><a href="#/join" data-page-link="join">加入我们</a><a href="#/contact" data-page-link="contact">合作联系</a><a data-api-docs href="#" target="_blank" rel="noopener noreferrer">API 帮助</a><a data-recharge href="#" target="_blank" rel="noopener noreferrer">官方充值</a><a data-repository href="#" target="_blank" rel="noreferrer">GitHub</a></div><span class="copyright">© <span data-year></span> LumiCore · 真正属于用户的智能</span></div></footer>
 </body>
 </html>

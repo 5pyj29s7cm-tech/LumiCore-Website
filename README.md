@@ -2,7 +2,7 @@
 
 LumiCore 官方网站的独立静态源码树。它与 LumiCore 桌面客户端、后端、记忆数据库和用户密钥分离，本机目录和 GitHub 远程都保持为独立仓库。
 
-官网以原 LumiAI 官网的信息架构为主体，保留智能宿主计划、全息载体、分布式心智、多模态产品、核心愿景与生态内容；LumiCore 开源仓库作为补充入口，不替代原有产品内容。多模态产品数据静态保存在站点内，不依赖 LumiCore 应用后端。
+官网沿用原官网的信息架构，保留智能宿主计划、全息载体、分布式心智、多模态产品、核心愿景与生态内容；LumiCore 开源仓库作为补充入口，不替代原有产品内容。多模态产品数据静态保存在站点内，不依赖 LumiCore 应用后端。
 
 ## 本机运行
 
@@ -34,9 +34,18 @@ cloudflared tunnel route dns lumi www.lumiai.asia
 
 Tunnel 只指向官网端口 `80`，不要指向 LumiCore 后端端口，也不要把 Cloudflare 凭据提交到 Git。
 
+## 官方服务入口
+
+官网通过 `site-config.js` 集中配置官方服务链接：
+
+- API 调用说明：<https://zhuan.huaczy.com/console/help>
+- 充值控制台：<https://zhuan.huaczy.com/console/recharge>
+
+OpenAI 兼容 SDK 的 Base URL 应填写 `https://zhuan.huaczy.com/v1`；`/api/v1` 仅用于平台登录、充值和其他业务接口。
+
 ## 修改 GitHub 入口
 
-源码仓库和反馈链接集中在 `site-config.js`。官网当前只提供源码入口，不公开未经完整验收的安装包。
+源码仓库、反馈链接和官方服务入口集中在 `site-config.js`。官网只提供源码与官方控制台链接，不公开未经完整验收的安装包。
 
 ## 许可证
 

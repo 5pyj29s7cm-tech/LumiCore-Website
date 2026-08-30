@@ -70,6 +70,10 @@ body[data-active-page="home"] .page-grid { opacity: .18; background-size: 64px 6
 .site-nav > a.active:not(.nav-github) { color: #fff; }
 .site-nav > a.active:not(.nav-github)::after { content: ""; height: 2px; margin-top: 7px; display: block; border-radius: 2px; background: var(--warm); box-shadow: 0 0 12px rgba(255,138,66,.6); }
 .nav-github { height: 43px; padding: 0 15px; display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); border-radius: 12px; background: rgba(255,255,255,.06); color: #fff !important; }
+.nav-api,.nav-recharge { white-space: nowrap; }
+.nav-api { color: #b7e8ec !important; }
+.nav-recharge { height: 39px; padding: 0 13px; display: inline-flex; align-items: center; border: 1px solid rgba(255,192,111,.34); border-radius: 11px; background: rgba(255,157,82,.10); color: var(--warm-soft) !important; }
+.nav-recharge:hover { border-color: rgba(255,192,111,.62); background: rgba(255,157,82,.18); }
 .nav-github b,.nav-github span { color: var(--warm-soft); }
 .menu-toggle { display: none; width: 42px; height: 42px; border: 1px solid var(--line); border-radius: 12px; background: transparent; }
 .menu-toggle span { display: block; width: 17px; height: 1px; margin: 5px auto; background: #fff; }
@@ -85,6 +89,10 @@ body[data-active-page="home"] .page-grid { opacity: .18; background-size: 64px 6
 .hero h1 strong { color: transparent; background: linear-gradient(95deg,#e6d3bb,var(--warm-soft)); background-clip: text; }
 .hero-lead { max-width: 690px; margin: 0; color: var(--muted); font-size: 17px; line-height: 1.9; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 33px; }
+.hero-service-links { margin-top: 17px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 17px; color: rgba(255,255,255,.34); font-size: 10px; }
+.hero-service-links > span { color: rgba(255,255,255,.24); font: 800 8px/1 ui-monospace,monospace; letter-spacing: .13em; }
+.hero-service-links a { color: #a9e6eb; transition: color .2s; }
+.hero-service-links a:hover { color: #fff; }
 .hero-entry-actions { gap: 10px; }.hero-entry-actions .button { min-height: 46px; padding: 0 17px; border-radius: 999px; gap: 9px; }.hero-entry-actions .button-primary { background: #f6f8fa; color: #11131a; box-shadow: 0 15px 34px rgba(0,0,0,.32); }.hero-entry-actions .button-ghost { background: rgba(255,255,255,.035); border-color: var(--line); }.button-icon { font-size: 17px; line-height: 1; }
 .button { min-height: 52px; padding: 0 24px; display: inline-flex; align-items: center; justify-content: center; gap: 18px; border: 1px solid transparent; border-radius: 14px; font-size: 13px; font-weight: 850; transition: transform .2s,background .2s,border-color .2s; }
 .button:hover { transform: translateY(-2px); }
@@ -141,6 +149,16 @@ body[data-active-page="home"] .page-grid { opacity: .18; background-size: 64px 6
 .github-copy > p { max-width: 650px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.9; }
 .home-contact { min-height: 390px; margin-bottom: 115px; padding: 52px 58px; display: grid; grid-template-columns: 1.15fr .85fr; align-items: end; gap: 70px; border: 1px solid rgba(255,138,66,.18); border-radius: 30px; background: radial-gradient(circle at 4% 100%,rgba(255,138,66,.13),transparent 38%),rgba(255,255,255,.018); }
 .home-contact h2 { max-width: 680px; margin: 19px 0 0; font-size: clamp(43px,5vw,66px); line-height: 1.05; letter-spacing: -.055em; }.home-contact p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.85; }
+.home-contact-details { margin-top: 23px; display: grid; gap: 10px; }
+.home-contact-detail { min-height: 45px; padding: 11px 13px; display: flex; align-items: center; justify-content: space-between; gap: 14px; border: 1px solid var(--line); border-radius: 12px; background: rgba(0,0,0,.16); }
+.home-contact-detail > span,.home-contact-wechat > span { color: rgba(255,255,255,.36); font: 800 8px/1 ui-monospace,monospace; letter-spacing: .10em; }
+.home-contact-detail > b,.home-contact-wechat b { color: #fff; font-size: 12px; overflow-wrap: anywhere; }
+.home-contact-detail:hover { border-color: rgba(101,220,230,.35); }
+.home-contact-wechat { padding: 11px 13px; border: 1px solid var(--line); border-radius: 12px; background: rgba(0,0,0,.16); }
+.home-contact-wechat > span { margin-bottom: 8px; display: block; }
+.home-contact-wechat > div { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.home-contact-wechat small { min-height: 0; margin-top: 6px; display: block; color: #66dc93; font-size: 9px; }
+.home-contact-actions { margin-top: 17px; }
 .home-next { padding: 0 0 120px; }
 .home-next > p { margin: 0 0 18px; color: rgba(255,255,255,.33); font: 800 9px/1 ui-monospace,monospace; letter-spacing: .15em; }
 .home-next > div { display: grid; grid-template-columns: repeat(3,1fr); border: 1px solid var(--line); border-radius: 24px; overflow: hidden; }
@@ -381,7 +399,7 @@ footer { border-top: 1px solid var(--line); background: rgba(0,0,0,.24); }
   :root { --shell: min(100% - 28px,680px); }
   .section-block { padding: 88px 0; }
   .site-header { top: 9px; width: calc(100vw - 18px); }.brand-copy small { display: none; }.site-nav > .nav-github { display: none; }
-  .hero { min-height: auto; padding: 120px 0 78px; gap: 40px; overflow: hidden; }.hero h1 { font-size: clamp(36px,10.8vw,50px); }.hero-lead { font-size: 15px; }.hero-visual { min-height: 490px; }.core-console { width: min(520px,96vw); }.signal-card { display: none; }
+  .hero { min-height: auto; grid-template-columns: minmax(0,1fr); padding: 120px 0 78px; gap: 40px; overflow: hidden; }.hero-copy { width: 100%; min-width: 0; }.hero h1 { width: 100%; max-width: 100%; font-size: clamp(36px,10.8vw,50px); overflow-wrap: anywhere; word-break: break-all; }.hero h1 span,.hero h1 em,.hero h1 strong { white-space: normal; }.hero-lead { width: 100%; max-width: 100%; font-size: 15px; overflow-wrap: anywhere; }.hero-visual { min-height: 490px; }.core-console { width: min(520px,96vw); }.signal-card { display: none; }
   .hero-entry-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }.hero-entry-actions .button { width: 100%; }
   .client-showcase { min-height: auto; padding: 115px 0 95px; }.client-showcase-layout { gap: 42px; }.client-showcase-copy h2 { font-size: 45px; }.client-video-toolbar { grid-template-columns: 1fr auto; }.client-video-toolbar em { display: none; }
   .page-hero { min-height: 480px; padding-top: 145px; padding-bottom: 64px; }.page-hero h1 { font-size: clamp(45px,12vw,66px); }

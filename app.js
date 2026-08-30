@@ -208,10 +208,12 @@ const setLinks = (selector, value) => {
 
 setLinks("[data-repository]", config.repository);
 setLinks("[data-contact]", config.contact || config.repository);
+setLinks("[data-recharge]", config.rechargeUrl);
+setLinks("[data-api-docs]", config.apiDocsUrl);
 document.querySelectorAll("[data-year]").forEach((node) => { node.textContent = new Date().getFullYear(); });
 if (config.supportEmail) {
   document.querySelectorAll("[data-support-email]").forEach((node) => {
-    node.setAttribute("href", `mailto:${config.supportEmail}?subject=${encodeURIComponent("LumiAI 合作咨询")}`);
+    node.setAttribute("href", `mailto:${config.supportEmail}?subject=${encodeURIComponent("LumiCore 合作咨询")}`);
   });
   document.querySelectorAll("[data-support-email-text]").forEach((node) => { node.textContent = config.supportEmail; });
 }
@@ -221,15 +223,15 @@ if (config.businessWechat) {
 
 const pages = new Set(["home", "ecosystem", "products", "industry", "vision", "docs", "contact", "join", "product-detail"]);
 const pageTitles = {
-  home: "LumiAI · 分布式智能，从本地开始",
-  ecosystem: "Lumi 生态 · LumiAI",
-  products: "多模态产品 · LumiAI",
-  industry: "行业方案 · LumiAI",
-  vision: "核心愿景 · LumiAI",
-  docs: "文档与源码 · LumiAI",
-  contact: "合作联系 · LumiAI",
-  join: "加入我们 · LumiAI",
-  "product-detail": "产品详情 · LumiAI",
+  home: "LumiCore · 分布式智能，从本地开始",
+  ecosystem: "LumiCore 生态",
+  products: "多模态产品 · LumiCore",
+  industry: "行业方案 · LumiCore",
+  vision: "核心愿景 · LumiCore",
+  docs: "文档与源码 · LumiCore",
+  contact: "合作联系 · LumiCore",
+  join: "加入我们 · LumiCore",
+  "product-detail": "产品详情 · LumiCore",
 };
 
 const routeFromHash = () => {
@@ -242,7 +244,7 @@ const populateProductDetail = (productId) => {
   const card = document.querySelector(`[data-product-id="${CSS.escape(productId)}"]`);
   const detail = document.querySelector("[data-product-detail]");
   if (!card || !detail) return false;
-  const name = card.querySelector("h3")?.textContent?.trim() || "Lumi 产品";
+  const name = card.querySelector("h3")?.textContent?.trim() || "LumiCore 产品";
   detail.querySelector("[data-detail-category]").textContent = card.querySelector(".product-meta span")?.textContent || "LUMI PRODUCT";
   detail.querySelector("[data-detail-name]").textContent = name;
   detail.querySelector("[data-detail-description]").textContent = card.querySelector(":scope > p")?.textContent || "";
@@ -250,7 +252,7 @@ const populateProductDetail = (productId) => {
   detail.querySelector("[data-detail-specs]").innerHTML = [...card.querySelectorAll("li")].map((item) => `<li>${item.textContent}</li>`).join("");
   const visual = card.querySelector(".product-visual")?.cloneNode(true);
   detail.querySelector("[data-detail-visual]").replaceChildren(...(visual ? [visual] : []));
-  document.title = `${name} · LumiAI`;
+  document.title = `${name} · LumiCore`;
   return true;
 };
 

@@ -16,6 +16,9 @@ if (packageJson.name !== 'lumicore-website') failures.push('package name must be
 if (!html.includes('LumiCore')) failures.push('public website must present the LumiCore product name');
 if (!contents[3].includes('5pyj29s7cm-tech/LumiCore')) failures.push('website repository links must target LumiCore');
 if (/LumiOS|Lumi OS|lumi-os/i.test(publicSiteSource)) failures.push('public website still exposes the legacy LumiOS brand');
+if (/LumiAI|Lumi AI/.test(publicSiteSource)) failures.push('public website still exposes the legacy LumiAI brand');
+if (!contents[3].includes('rechargeUrl: "https://zhuan.huaczy.com/console/recharge"')) failures.push('official recharge URL must be centrally configured');
+if (!contents[3].includes('apiDocsUrl: "https://zhuan.huaczy.com/console/help"')) failures.push('official API help URL must be centrally configured');
 for (const marker of [
   "data-repository",
   "data-page=\"home\"",
@@ -37,6 +40,10 @@ for (const marker of [
   "DISTRIBUTED INTELLIGENCE",
   "SMART HOST PROGRAM",
   "FOUNDER'S SANCTUARY",
+  "data-recharge",
+  "data-api-docs",
+  "data-support-email",
+  "data-wechat-id",
   "全息显示载体",
   "智能桌面台灯",
   "Order 协调主机",
@@ -65,6 +72,16 @@ if (!contents[2].includes("drawAmbient") || !contents[1].includes("ambient-canva
 }
 if (!contents[3].includes("supportEmail") || !contents[3].includes("businessWechat")) {
   failures.push("verified business contact details must remain centrally configured");
+}
+const homeContact = html.match(/<section class="home-contact[^"]*">([\s\S]*?)<\/section>/)?.[1] || "";
+if (!homeContact.includes("data-support-email") || !homeContact.includes("data-wechat-id")) {
+  failures.push("homepage must expose the configured email and business WeChat contact");
+}
+for (const attribute of ["data-recharge", "data-api-docs"]) {
+  const externalLinks = [...html.matchAll(new RegExp(`<a[^>]*${attribute}[^>]*>`, "g"))].map(([tag]) => tag);
+  if (!externalLinks.length || externalLinks.some((tag) => !/target="_blank"/.test(tag) || !/rel="[^"]*noopener/.test(tag) || !/rel="[^"]*noreferrer/.test(tag))) {
+    failures.push(`${attribute} links must open in a protected external tab`);
+  }
 }
 
 const expectedProducts = [

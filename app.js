@@ -238,6 +238,11 @@ setLinks("[data-repository]", config.repository);
 setLinks("[data-contact]", config.contact || config.repository);
 setLinks("[data-recharge]", config.rechargeUrl);
 setLinks("[data-api-docs]", config.apiDocsUrl);
+setLinks("[data-getting-started]", `${config.repository}/blob/main/README.md#从源码运行`);
+setLinks("[data-contributing]", `${config.repository}/blob/main/CONTRIBUTING.md`);
+setLinks("[data-extension-api]", `${config.repository}/blob/main/docs/LUMI_EXTENSION_API_V1.md`);
+document.querySelectorAll("[data-clone-command]").forEach((node) => { node.textContent = `git clone ${config.repository}.git`; });
+document.querySelectorAll("[data-api-base]").forEach((node) => { node.textContent = config.apiBaseUrl; });
 document.querySelectorAll("[data-year]").forEach((node) => { node.textContent = new Date().getFullYear(); });
 if (config.supportEmail) {
   document.querySelectorAll("[data-support-email]").forEach((node) => {
@@ -265,8 +270,11 @@ const pageTitles = {
 const routeFromHash = () => {
   const path = window.location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   if (path[0] === "product" && path[1]) return { page: "product-detail", productId: path[1] };
+  if (path[0] === "join" && path[1] === "apply") return { page: "join", anchor: "join-application" };
   return { page: pages.has(path[0]) && path[0] !== "product-detail" ? path[0] : "home" };
 };
+
+let previousRoute;
 
 const populateProductDetail = (productId) => {
   const card = document.querySelector(`[data-product-id="${CSS.escape(productId)}"]`);
@@ -287,6 +295,8 @@ const populateProductDetail = (productId) => {
 const renderRoute = (event) => {
   let route = routeFromHash();
   if (route.page === "product-detail" && !populateProductDetail(route.productId)) route = { page: "products" };
+  const returningToProducts = route.page === "products" && previousRoute?.page === "product-detail";
+  const samePage = route.page === previousRoute?.page && route.productId === previousRoute?.productId;
   document.querySelectorAll("[data-page]").forEach((node) => {
     const active = node.dataset.page === route.page;
     node.hidden = !active;
@@ -300,17 +310,81 @@ const renderRoute = (event) => {
   document.body.dataset.activePage = route.page;
   if (route.page !== "home") clientVideo?.pause();
   setMenuOpen(false);
-  if (event) {
+  if (event && !samePage && !returningToProducts && !route.anchor) {
     const heading = document.querySelector(`[data-page="${route.page}"] h1`);
     if (heading) {
       heading.tabIndex = -1;
       heading.focus({ preventScroll: true });
     }
   }
-  window.scrollTo({ top: 0, behavior: "instant" });
+  if (route.anchor) {
+    const target = document.getElementById(route.anchor);
+    target?.classList.add("visible");
+    if (target) {
+      target.tabIndex = -1;
+      target.focus({ preventScroll: true });
+      target.scrollIntoView({ block: "start", behavior: "instant" });
+    }
+  } else if (returningToProducts) {
+    const card = document.querySelector(`[data-product-id="${CSS.escape(previousRoute.productId)}"]`);
+    if (card && !card.hidden) {
+      productGrid?.classList.add("visible");
+      card.focus({ preventScroll: true });
+      card.scrollIntoView({ block: "center", behavior: "instant" });
+    } else {
+      document.querySelector(".product-filters")?.scrollIntoView({ block: "start", behavior: "instant" });
+      document.querySelector("[data-product-filter].active")?.focus({ preventScroll: true });
+    }
+  } else if (!samePage || !event || event.type === "click") {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }
+  previousRoute = route;
 };
 
 window.addEventListener("hashchange", renderRoute);
+document.querySelectorAll('a[href^="#/"]').forEach((link) => link.addEventListener("click", (event) => {
+  if (link.hash !== window.location.hash || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+  event.preventDefault();
+  renderRoute(event);
+}));
+
+const copyText = async (value) => {
+  try {
+    await navigator.clipboard.writeText(value);
+  } catch {
+    const input = document.createElement("textarea");
+    input.value = value;
+    input.style.position = "fixed";
+    input.style.opacity = "0";
+    document.body.append(input);
+    input.select();
+    let copied;
+    try { copied = document.execCommand("copy"); }
+    finally { input.remove(); }
+    if (!copied) throw new Error("Copy unavailable");
+  }
+};
+document.querySelectorAll("[data-copy-code]").forEach((button) => {
+  const label = button.textContent;
+  let reset;
+  button.addEventListener("click", async () => {
+    const field = button.closest(".copy-field");
+    const value = field?.querySelector("code")?.textContent?.trim();
+    const status = field?.querySelector("[data-copy-status]");
+    if (!value) return;
+    window.clearTimeout(reset);
+    try {
+      await copyText(value);
+      button.textContent = "已复制";
+      if (status) status.textContent = "已复制到剪贴板";
+    } catch {
+      button.textContent = "请手动复制";
+      if (status) status.textContent = "复制未成功，请选中上方文字复制。";
+    }
+    button.focus({ preventScroll: true });
+    reset = window.setTimeout(() => { button.textContent = label; }, 2000);
+  });
+});
 
 document.querySelectorAll("[data-copy-wechat]").forEach((button) => button.addEventListener("click", async () => {
   const status = button.closest(".contact-method")?.querySelector("[data-copy-status]");
@@ -388,6 +462,9 @@ productFilters.forEach((button) => button.addEventListener("click", () => {
   });
   const partner = productGrid?.querySelector(".product-partner-card");
   if (partner) partner.hidden = category !== "all";
+  const count = productGrid?.querySelectorAll("[data-product-category]:not([hidden])").length || 0;
+  const countLabel = document.querySelector("[data-product-count]");
+  if (countLabel) countLabel.textContent = category === "all" ? `共 ${count} 款产品` : `当前分类 · ${count} 款产品`;
   if (!motionPreference.matches) productGrid?.animate(
     [{ opacity: .45, transform: "translateY(5px)" }, { opacity: 1, transform: "none" }],
     { duration: 260, easing: "ease-out" },
@@ -395,7 +472,9 @@ productFilters.forEach((button) => button.addEventListener("click", () => {
 }));
 
 document.querySelectorAll("[data-product-id]").forEach((card) => {
-  const open = () => { window.location.hash = `#/product/${card.dataset.productId}`; };
+  const open = () => {
+    window.location.hash = `#/product/${card.dataset.productId}`;
+  };
   card.addEventListener("click", open);
   card.addEventListener("keydown", (event) => {
     if (event.key !== "Enter" && event.key !== " ") return;
@@ -410,24 +489,36 @@ document.querySelectorAll("[data-product-back]").forEach((button) => button.addE
 const editions = {
   commerce: {
     kicker: "COMMERCE",
+    audience: "店铺经营与电商运营团队",
+    input: "店铺数据、商品资料与内容需求",
+    output: "经营分析、商品管理与内容客服任务",
     title: "从今日经营到内容客服，一条链完成。",
     description: "围绕店铺日常经营组织数据、商品、内容和客服工作；涉及改价、上下架与外发时保留人工确认。",
     workflow: ["今日经营", "爆款雷达", "店铺数据", "商品管理", "内容与客服"]
   },
   design: {
     kicker: "INTERIOR DESIGN",
+    audience: "室内设计师与设计工作室",
+    input: "项目需求、空间资料与设计文件",
+    output: "CAD 方案、效果图、提案与交付核验",
     title: "从新建设计项目开始，贯通方案与交付。",
     description: "项目资料、CAD 方案、效果图、提案 PPT 和交付核验共享同一上下文，避免每一步重新猜测任务对象。",
     workflow: ["设计项目", "CAD 方案", "效果图", "提案 PPT", "交付中心"]
   },
   legal: {
     kicker: "LEGAL",
+    audience: "律师与案件协作团队",
+    input: "案件材料、合同与待核对的问题",
+    output: "检索依据、审查意见与文书草稿",
     title: "让案件材料、检索、文书与核验持续关联。",
     description: "服务律师的案件工作台，支持文书草稿、合同审查、法条类案和财产线索流程；关键结论保留依据和人工复核。",
     workflow: ["案件工作台", "文书生成", "合同审查", "法条与类案", "财产线索", "交付核验"]
   },
   finance: {
     kicker: "FINANCE & TAX",
+    audience: "企业财税与经营管理团队",
+    input: "票据、账务资料与经营数据",
+    output: "账务处理、申报准备与报表交付",
     title: "把经营数据转化为可追溯的财税工作流。",
     description: "围绕票税、账务、申报、资金风险和报表交付组织任务；申报与外部提交在最后一步严格确认。",
     workflow: ["经营看板", "票税管理", "账务处理", "税务申报", "资金与风险", "报表交付"]
@@ -447,6 +538,9 @@ document.querySelectorAll("[data-edition]").forEach((button) => button.addEventL
   stage.querySelector("[data-edition-kicker]").textContent = value.kicker;
   stage.querySelector("[data-edition-title]").textContent = value.title;
   stage.querySelector("[data-edition-description]").textContent = value.description;
+  stage.querySelector("[data-edition-audience]").textContent = value.audience;
+  stage.querySelector("[data-edition-input]").textContent = value.input;
+  stage.querySelector("[data-edition-output]").textContent = value.output;
   stage.querySelector("[data-edition-workflow]").innerHTML = value.workflow.map((item, index) => `${index ? "<i>→</i>" : ""}<span>${item}</span>`).join("");
 }));
 

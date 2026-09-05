@@ -14,6 +14,11 @@ MP4 保留原视频与音频流，并将播放索引放在文件开头，以便�
 
 ## 本机运行
 
+站内页面使用 `#/页面名` 路由；`#/join/apply` 可直接打开参与申请说明。
+产品详情返回列表时保留当前分类，并定位到刚查看的产品。
+文档页提供公开项目文档、源码命令、官方 API 地址和常见问题；
+外部入口与 API Base URL 统一由 `site-config.js` 配置。
+
 ```powershell
 cd D:\LumiCore-Website
 npm run check

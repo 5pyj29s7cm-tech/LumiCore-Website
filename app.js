@@ -1,4 +1,32 @@
 const config = window.LUMI_SITE || {};
+const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+const clientVideo = document.querySelector("[data-client-video-player]");
+const videoStatus = document.querySelector("[data-video-status]");
+const showVideoStatus = (message = "") => {
+  if (!videoStatus) return;
+  videoStatus.textContent = message;
+  videoStatus.hidden = !message;
+};
+document.querySelector("[data-watch-demo]")?.addEventListener("click", () => {
+  clientVideo?.scrollIntoView({ behavior: motionPreference.matches ? "instant" : "smooth", block: "start" });
+  clientVideo?.focus({ preventScroll: true });
+  clientVideo?.play().catch((error) => {
+    if (error.name !== "AbortError") showVideoStatus("暂时无法开始播放，请使用播放器重试，或单独打开视频。");
+  });
+});
+clientVideo?.addEventListener("playing", () => showVideoStatus());
+clientVideo?.addEventListener("error", () => showVideoStatus("视频暂时无法加载，请刷新重试，或单独打开视频。"));
+clientVideo?.querySelector("source")?.addEventListener("error", () => showVideoStatus("视频暂时无法加载，请刷新重试，或单独打开视频。"));
+if (clientVideo) {
+  let wasVisible = false;
+  new IntersectionObserver(([entry]) => {
+    if (!entry.isIntersecting && wasVisible && !document.fullscreenElement) clientVideo.pause();
+    wasVisible = entry.isIntersecting;
+  }, { threshold: 0 }).observe(clientVideo);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) clientVideo.pause();
+  });
+}
 
 const ambientCanvas = document.querySelector("#lumi-ambient");
 if (ambientCanvas instanceof HTMLCanvasElement) {
@@ -237,7 +265,7 @@ const pageTitles = {
 const routeFromHash = () => {
   const path = window.location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
   if (path[0] === "product" && path[1]) return { page: "product-detail", productId: path[1] };
-  return { page: pages.has(path[0]) ? path[0] : "home" };
+  return { page: pages.has(path[0]) && path[0] !== "product-detail" ? path[0] : "home" };
 };
 
 const populateProductDetail = (productId) => {
@@ -256,7 +284,7 @@ const populateProductDetail = (productId) => {
   return true;
 };
 
-const renderRoute = () => {
+const renderRoute = (event) => {
   let route = routeFromHash();
   if (route.page === "product-detail" && !populateProductDetail(route.productId)) route = { page: "products" };
   document.querySelectorAll("[data-page]").forEach((node) => {
@@ -270,6 +298,15 @@ const renderRoute = () => {
   });
   if (route.page !== "product-detail") document.title = pageTitles[route.page] || pageTitles.home;
   document.body.dataset.activePage = route.page;
+  if (route.page !== "home") clientVideo?.pause();
+  setMenuOpen(false);
+  if (event) {
+    const heading = document.querySelector(`[data-page="${route.page}"] h1`);
+    if (heading) {
+      heading.tabIndex = -1;
+      heading.focus({ preventScroll: true });
+    }
+  }
   window.scrollTo({ top: 0, behavior: "instant" });
 };
 
@@ -305,14 +342,28 @@ window.addEventListener("scroll", updateHeader, { passive: true });
 
 const menuButton = document.querySelector("[data-menu-toggle]");
 const menu = document.querySelector("[data-menu]");
+const setMenuOpen = (open) => {
+  menu?.classList.toggle("open", open);
+  menuButton?.setAttribute("aria-expanded", String(open));
+  menuButton?.setAttribute("aria-label", open ? "关闭导航" : "打开导航");
+};
 menuButton?.addEventListener("click", () => {
-  const open = menu?.classList.toggle("open") ?? false;
-  menuButton.setAttribute("aria-expanded", String(open));
+  setMenuOpen(!menu?.classList.contains("open"));
 });
-menu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
-  menu.classList.remove("open");
-  menuButton?.setAttribute("aria-expanded", "false");
-}));
+menu?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => setMenuOpen(false)));
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && menu?.classList.contains("open")) {
+    setMenuOpen(false);
+    menuButton?.focus();
+  }
+});
+document.addEventListener("click", (event) => {
+  if (!header?.contains(event.target)) setMenuOpen(false);
+});
+document.addEventListener("focusin", (event) => {
+  if (!header?.contains(event.target)) setMenuOpen(false);
+});
+window.matchMedia("(max-width: 1120px)").addEventListener("change", () => setMenuOpen(false));
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
@@ -325,15 +376,19 @@ document.querySelectorAll(".reveal").forEach((node) => observer.observe(node));
 
 const productGrid = document.querySelector("[data-product-grid]");
 const productFilters = document.querySelectorAll("[data-product-filter]");
+productFilters.forEach((button) => button.setAttribute("aria-pressed", String(button.classList.contains("active"))));
 productFilters.forEach((button) => button.addEventListener("click", () => {
   const category = button.dataset.productFilter;
-  productFilters.forEach((item) => item.classList.toggle("active", item === button));
+  productFilters.forEach((item) => {
+    item.classList.toggle("active", item === button);
+    item.setAttribute("aria-pressed", String(item === button));
+  });
   productGrid?.querySelectorAll("[data-product-category]").forEach((card) => {
     card.hidden = category !== "all" && card.dataset.productCategory !== category;
   });
   const partner = productGrid?.querySelector(".product-partner-card");
   if (partner) partner.hidden = category !== "all";
-  productGrid?.animate(
+  if (!motionPreference.matches) productGrid?.animate(
     [{ opacity: .45, transform: "translateY(5px)" }, { opacity: 1, transform: "none" }],
     { duration: 260, easing: "ease-out" },
   );
@@ -380,11 +435,15 @@ const editions = {
 };
 
 const stage = document.querySelector("[data-edition-stage]");
+document.querySelectorAll("[data-edition]").forEach((button) => button.setAttribute("aria-pressed", String(button.classList.contains("active"))));
 document.querySelectorAll("[data-edition]").forEach((button) => button.addEventListener("click", () => {
   const value = editions[button.dataset.edition];
   if (!value || !stage) return;
-  document.querySelectorAll("[data-edition]").forEach((item) => item.classList.toggle("active", item === button));
-  stage.animate([{ opacity: .45, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { duration: 260, easing: "ease-out" });
+  document.querySelectorAll("[data-edition]").forEach((item) => {
+    item.classList.toggle("active", item === button);
+    item.setAttribute("aria-pressed", String(item === button));
+  });
+  if (!motionPreference.matches) stage.animate([{ opacity: .45, transform: "translateY(6px)" }, { opacity: 1, transform: "none" }], { duration: 260, easing: "ease-out" });
   stage.querySelector("[data-edition-kicker]").textContent = value.kicker;
   stage.querySelector("[data-edition-title]").textContent = value.title;
   stage.querySelector("[data-edition-description]").textContent = value.description;

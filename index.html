@@ -11,9 +11,9 @@
   <link rel="canonical" href="https://lumiai.asia/" />
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
   <title>LumiCore · 分布式智能，从本地开始</title>
-  <link rel="stylesheet" href="/styles.css?v=20260830-brand1" />
-  <script src="/site-config.js?v=20260830-brand1" defer></script>
-  <script src="/app.js?v=20260830-brand1" defer></script>
+  <link rel="stylesheet" href="/styles.css?v=20260905-video1" />
+  <script src="/site-config.js?v=20260905-video1" defer></script>
+  <script src="/app.js?v=20260905-video1" defer></script>
 </head>
 <body>
   <canvas class="ambient-canvas" id="lumi-ambient" aria-hidden="true"></canvas>
@@ -28,8 +28,8 @@
       </span>
       <span class="brand-copy"><strong>LumiCore</strong><small>PRIVATE INTELLIGENCE</small></span>
     </a>
-    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
-    <nav class="site-nav" data-menu aria-label="主导航">
+    <button class="menu-toggle" type="button" aria-label="打开导航" aria-expanded="false" aria-controls="site-navigation" data-menu-toggle><span></span><span></span></button>
+    <nav class="site-nav" id="site-navigation" data-menu aria-label="主导航">
       <a href="#/home" data-page-link="home">首页</a><a href="#/ecosystem" data-page-link="ecosystem">Lumi 生态</a><a href="#/products" data-page-link="products">多模态产品</a><a href="#/industry" data-page-link="industry">行业方案</a><a href="#/contact" data-page-link="contact">合作联系</a>
       <a class="nav-api" data-api-docs href="#" target="_blank" rel="noopener noreferrer">API 帮助 ↗</a><a class="nav-recharge" data-recharge href="#" target="_blank" rel="noopener noreferrer">官方充值 ↗</a>
       <a class="nav-github" data-repository href="#" target="_blank" rel="noreferrer">GitHub <b data-star-count>263</b><span>★</span></a>
@@ -46,6 +46,7 @@
         <div class="hero-actions hero-entry-actions"><a class="button button-primary" data-repository href="#" target="_blank" rel="noreferrer"><span class="button-icon">⌁</span>查看 GitHub <span>↗</span></a><a class="button button-ghost" href="#/docs" data-page-link="docs">开发者文档 <span>→</span></a><a class="button button-ghost" href="#/vision" data-page-link="vision">核心愿景 <span>→</span></a><a class="button button-ghost" href="#/join" data-page-link="join">加入我们 <span>→</span></a></div>
         <div class="hero-service-links" aria-label="官方服务入口"><span>官方服务入口</span><a data-api-docs href="#" target="_blank" rel="noopener noreferrer">API 调用说明 ↗</a><a data-recharge href="#" target="_blank" rel="noopener noreferrer">充值控制台 ↗</a></div>
         <div class="hero-notes"><span><i class="status-dot"></i>本地数据优先</span><span>多模型自由编排</span><span>语音 · 记忆 · 执行</span></div>
+        <button class="watch-demo" type="button" data-watch-demo><span aria-hidden="true">▶</span> 观看完整演示 <small>4 分 07 秒</small><span aria-hidden="true">↓</span></button>
       </div>
       <div class="hero-visual reveal" aria-label="Lumi 神经核心">
         <div class="core-console">
@@ -58,17 +59,18 @@
       </div>
     </section>
 
-    <section class="client-showcase" data-client-video>
+    <section class="client-showcase" id="client-demo" data-client-video aria-labelledby="client-demo-title">
       <div class="client-showcase-glow" aria-hidden="true"></div>
       <div class="section-shell client-showcase-layout">
-        <div class="client-showcase-copy reveal scroll-copy"><span class="section-index">REAL LUMI CLIENT · LIVE CAPTURE</span><h2>不是概念动画，<br />是正在运行的 Lumi。</h2><p>画面直接录制自主程序客户端：本地神经核心、语音入口、技能与记忆工作区都来自真实产品。视频已裁去私人会话与敏感信息。</p><div class="client-facts"><span>真实客户端</span><span>本机运行</span><span>无模拟界面</span></div></div>
+        <div class="client-showcase-copy reveal scroll-copy"><div><span class="section-index">LUMICORE IN ACTION</span><h2 id="client-demo-title">看看 Lumi 如何<br />完成真实工作。</h2></div><div><p id="client-demo-description">从语音交流、技能调用，到文档编辑和网页操作，观看 Lumi 在桌面上完成任务的全过程。</p><div class="client-facts"><span>真实录屏</span><span>1080p</span><span>4 分 07 秒</span></div></div></div>
         <div class="client-video-shell reveal">
           <div class="client-video-toolbar"><span><i></i><i></i><i></i></span><b>LUMICORE · PERSONAL DESKTOP</b><em>LIVE CAPTURE</em></div>
-          <video data-client-video-player autoplay muted loop playsinline controls preload="metadata" poster="assets/lumi-client-poster.webp">
-            <source src="assets/lumi-client-command-center.mp4?v=20260817-real1" type="video/mp4" />
-            当前浏览器不支持视频播放。
+          <video data-client-video-player playsinline controls preload="none" width="1920" height="1080" aria-label="LumiCore 桌面操作完整演示" aria-describedby="client-demo-description" poster="assets/lumi-client-poster.webp?v=20260905-video1">
+            <source src="assets/lumi-client-command-center.mp4?v=20260905-video1" type="video/mp4" />
+            当前浏览器不支持视频播放，可打开下方的完整视频链接观看。
           </video>
-          <div class="client-video-meta"><span>VOICE PRIMARY</span><span>MEMORY LOCAL</span><span>TOOLS VERIFIED</span></div>
+          <div class="client-video-meta"><span>点击播放 · 支持全屏观看</span><a href="assets/lumi-client-command-center.mp4?v=20260905-video1" target="_blank" rel="noopener noreferrer">单独打开视频 ↗</a></div>
+          <p class="video-status" data-video-status role="status" hidden></p>
         </div>
       </div>
     </section>
@@ -95,10 +97,10 @@
     </div>
 
     <div class="site-page" data-page="products" hidden>
-    <section class="page-hero section-shell"><span class="section-index">MULTIMODAL PRODUCTS</span><h1>让 Lumi 走出屏幕，<br />进入真实世界。</h1><p>沿用原官网的多模态产品体系。点击任一产品，进入独立详情页。</p></section>
+    <section class="page-hero section-shell"><span class="section-index">MULTIMODAL PRODUCTS</span><h1>让 Lumi 走出屏幕，<br />进入真实世界。</h1><p>探索连接数字智能与日常生活的设备。选择产品，了解定位、规格与合作方式。</p></section>
     <section class="product-section section-block" id="products"><div class="section-shell">
-      <div class="section-heading reveal"><div><span class="section-index">MULTIMODAL PRODUCTS</span><h2>从数字智能，走进物理现实。</h2></div><p>这不是概念占位，而是 Lumi 原有的多模态产品体系。产品名称、定位、价格与规格均沿用原官网数据。</p></div>
-      <div class="product-filters reveal" role="tablist" aria-label="多模态产品分类"><button class="active" type="button" data-product-filter="all">全部产品 <b>7</b></button><button type="button" data-product-filter="core">核心设备 <b>3</b></button><button type="button" data-product-filter="wearable">智能穿戴 <b>2</b></button><button type="button" data-product-filter="companion">AI 陪伴 <b>2</b></button></div>
+      <div class="section-heading reveal"><div><span class="section-index">MULTIMODAL PRODUCTS</span><h2>从数字智能，走进物理现实。</h2></div><p>从桌面设备到智能穿戴与 AI 陪伴，找到适合你的 Lumi 载体。</p></div>
+      <div class="product-filters reveal" role="group" aria-label="多模态产品分类"><button class="active" type="button" data-product-filter="all">全部产品 <b>7</b></button><button type="button" data-product-filter="core">核心设备 <b>3</b></button><button type="button" data-product-filter="wearable">智能穿戴 <b>2</b></button><button type="button" data-product-filter="companion">AI 陪伴 <b>2</b></button></div>
       <div class="product-grid reveal" data-product-grid>
         <article class="product-card" data-product-id="1" data-product-category="core" tabindex="0" role="link" aria-label="查看全息显示载体详情">
           <div class="product-visual visual-hologram" aria-hidden="true"><svg viewBox="0 0 240 170"><defs><linearGradient id="holo-a" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffbd78"/><stop offset="1" stop-color="#ff5d43"/></linearGradient><radialGradient id="holo-b"><stop stop-color="#fff"/><stop offset=".2" stop-color="#79ecff"/><stop offset="1" stop-color="#5d5cff" stop-opacity="0"/></radialGradient></defs><ellipse cx="120" cy="145" rx="69" ry="13" fill="#ff8b4a" opacity=".18"/><path d="M73 133h94l-13 13H86z" fill="url(#holo-a)"/><path d="M92 129 105 52h30l13 77z" fill="#66e8ff" opacity=".15"/><circle cx="120" cy="75" r="37" fill="url(#holo-b)"/><circle cx="120" cy="75" r="23" fill="none" stroke="#d9fbff" stroke-opacity=".65"/></svg><span>HOLOGRAM CARRIER</span></div>
@@ -160,7 +162,7 @@
     <section class="page-hero section-shell"><span class="section-index">INDUSTRY EDITIONS</span><h1>保留 Lumi 核心，<br />为行业做减法。</h1><p>不是重新做一个程序，而是把通用能力组织成行业用户熟悉、稳定、可直接交付的工作流。</p></section>
     <section class="industry-section section-block" id="industry"><div class="section-shell">
       <div class="section-heading reveal"><div><span class="section-index">INDUSTRY EDITIONS</span><h2>保留 Lumi 核心，为真实行业做减法。</h2></div><p>定制版不是换皮，而是把通用能力压缩成行业用户熟悉、稳定、能直接交付结果的工作流。</p></div>
-      <div class="edition-tabs reveal" role="tablist" aria-label="LumiCore 行业版本"><button class="active" data-edition="commerce" type="button">电商版</button><button data-edition="design" type="button">设计师版</button><button data-edition="legal" type="button">律师版</button><button data-edition="finance" type="button">财税版</button></div>
+      <div class="edition-tabs reveal" role="group" aria-label="LumiCore 行业版本"><button class="active" data-edition="commerce" type="button">电商版</button><button data-edition="design" type="button">设计师版</button><button data-edition="legal" type="button">律师版</button><button data-edition="finance" type="button">财税版</button></div>
       <div class="edition-stage reveal" data-edition-stage><div class="edition-copy"><span data-edition-kicker>COMMERCE</span><h3 data-edition-title>从今日经营到内容客服，一条链完成。</h3><p data-edition-description>围绕店铺日常经营组织数据、商品、内容与客服；涉及改价、上下架和外发时保留人工确认。</p></div><div class="workflow" data-edition-workflow><span>今日经营</span><i>→</i><span>爆款雷达</span><i>→</i><span>店铺数据</span><i>→</i><span>商品管理</span><i>→</i><span>内容与客服</span></div></div>
     </div></section>
     <section class="industry-principles section-shell"><article><span>01</span><h3>需求即入口</h3><p>首页按钮使用行业语言，不要求客户先理解模型、技能和插件。</p></article><article><span>02</span><h3>流程共享上下文</h3><p>每一步延续同一项目、材料和任务账本，而不是互相独立。</p></article><article><span>03</span><h3>关键动作确认</h3><p>分析与草稿自动完成，发送、申报、改价等外部提交保留确认。</p></article></section>

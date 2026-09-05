@@ -12,6 +12,7 @@ let port;
 let fixtureWorkspace;
 let fixtureRoot;
 const privateFixture = "private regression fixture; never public";
+const videoFixture = Buffer.from(Array.from({ length: 1024 }, (_, index) => index % 256));
 before(async () => {
   fixtureWorkspace = mkdtempSync(join(tmpdir(), "lumicore-website-http-test-"));
   fixtureRoot = join(fixtureWorkspace, "site");
@@ -21,14 +22,16 @@ before(async () => {
     copyFileSync(join(sourceRoot, file), join(fixtureRoot, file));
   }
   cpSync(join(sourceRoot, "assets"), join(fixtureRoot, "assets"), { recursive: true });
+  writeFileSync(join(fixtureRoot, "assets", "range-test.mp4"), videoFixture);
+  writeFileSync(join(fixtureRoot, "assets", "empty-test.mp4"), Buffer.alloc(0));
   // Materialize denied paths so these checks cannot pass merely because a file is absent.
   for (const file of [
-    ".git/HEAD", ".git/config", ".cloudflared/private.png",
+    ".git/HEAD", ".git/config", ".cloudflared/private.png", ".cloudflared/private.mp4",
     ".cloudflared/lumi-existing-credentials.json", ".cloudflared/config.yml",
     ".codex-run/test.log", "package.json", "README.md", "scripts/start-production.ps1",
-    "cloudflare/config.example.yml", "operations/private.png",
+    "cloudflare/config.example.yml", "operations/private.png", "operations/private.mp4",
     "assets/private.json", "assets/private.txt", "assets/private.js", "assets/private.map",
-    "assets/private.html", "assets/.private.png", "assets/.private/nested.png",
+    "assets/private.html", "assets/.private.png", "assets/.private.mp4", "assets/.private/nested.png",
   ]) {
     const target = join(fixtureRoot, file);
     mkdirSync(dirname(target), { recursive: true });
@@ -40,6 +43,7 @@ before(async () => {
   const siblingRoot = join(fixtureWorkspace, "site-other");
   mkdirSync(siblingRoot);
   writeFileSync(join(siblingRoot, "secret.png"), privateFixture);
+  writeFileSync(join(siblingRoot, "secret.mp4"), privateFixture);
   const linkType = process.platform === "win32" ? "junction" : "dir";
   for (const [target, alias] of [
     [join(fixtureRoot, ".cloudflared"), "private-alias"],
@@ -74,12 +78,16 @@ after(async () => {
   }
 });
 
-function probe(path, method = "GET") {
+function probe(path, method = "GET", headers = {}) {
   return new Promise((resolve, reject) => {
-    const req = request({ host: "127.0.0.1", port, path, method }, res => {
+    const req = request({ host: "127.0.0.1", port, path, method, headers }, res => {
       const chunks = [];
       res.on("data", chunk => chunks.push(chunk));
-      res.on("end", () => resolve({ status: res.statusCode, headers: res.headers, body: Buffer.concat(chunks).toString("utf8") }));
+      res.on("error", reject);
+      res.on("end", () => {
+        const bytes = Buffer.concat(chunks);
+        resolve({ status: res.statusCode, headers: res.headers, body: bytes.toString("utf8"), bytes });
+      });
     });
     req.on("error", reject);
     req.end();
@@ -144,6 +152,88 @@ test("asset junctions cannot expose private files inside or outside the website 
       assert.equal(result.status, 404, `${method} ${path}`);
       assert.equal(result.body, method === "HEAD" ? "" : "Not Found", `${method} ${path}`);
       assert.equal(result.headers["cache-control"], "no-store");
+    }
+  }
+});
+
+test("video GET and HEAD advertise the complete length and byte-range support", async () => {
+  const full = await probe("/assets/range-test.mp4");
+  assert.equal(full.status, 200);
+  assert.deepEqual(full.bytes, videoFixture);
+  for (const result of [full, await probe("/assets/range-test.mp4", "HEAD")]) {
+    assert.equal(result.headers["content-length"], String(videoFixture.length));
+    assert.equal(result.headers["accept-ranges"], "bytes");
+    assert.equal(result.headers["content-type"], "video/mp4");
+    assert.equal(result.headers["content-range"], undefined);
+  }
+  for (const range of ["bytes=2-5", "bytes=99999-"]) {
+    const head = await probe("/assets/range-test.mp4", "HEAD", { Range: range });
+    assert.equal(head.status, 200);
+    assert.equal(head.headers["content-length"], String(videoFixture.length));
+    assert.equal(head.headers["content-range"], undefined);
+    assert.equal(head.bytes.length, 0);
+  }
+});
+
+test("video seeks return exactly the requested prefix, middle, open end or suffix", async () => {
+  for (const [range, start, end] of [
+    ["bytes=0-0", 0, 0],
+    ["bytes=254-260", 254, 260],
+    ["bytes=1000-", 1000, 1023],
+    ["bytes=-17", 1007, 1023],
+    ["bytes=1010-999999999999999999999999", 1010, 1023],
+    ["bytes=-999999999999999999999999", 0, 1023],
+    ["BYTES=0002-0005", 2, 5],
+  ]) {
+    const result = await probe("/assets/range-test.mp4?v=seek", "GET", { Range: range });
+    assert.equal(result.status, 206, range);
+    assert.equal(result.headers["content-range"], `bytes ${start}-${end}/${videoFixture.length}`, range);
+    assert.equal(result.headers["content-length"], String(end - start + 1), range);
+    assert.equal(result.headers["accept-ranges"], "bytes", range);
+    assert.equal(result.headers["content-type"], "video/mp4", range);
+    assert.equal(result.headers["x-content-type-options"], "nosniff", range);
+    assert.deepEqual(result.bytes, videoFixture.subarray(start, end + 1), range);
+  }
+});
+
+test("invalid and unsatisfiable video ranges return 416 without file content", async () => {
+  for (const range of ["bytes=1024-", "bytes=999999999999999999999999-", "bytes=9-8", "bytes=-0", "bytes=-", "bytes=abc-def", "bytes=0-1oops", "bytes=1.5-2"]) {
+    const result = await probe("/assets/range-test.mp4", "GET", { Range: range });
+    assert.equal(result.status, 416, range);
+    assert.equal(result.headers["content-range"], `bytes */${videoFixture.length}`, range);
+    assert.equal(result.headers["content-length"], "0", range);
+    assert.equal(result.headers["cache-control"], "no-store", range);
+    assert.equal(result.bytes.length, 0, range);
+  }
+  const empty = await probe("/assets/empty-test.mp4", "GET", { Range: "bytes=0-" });
+  assert.equal(empty.status, 416);
+  assert.equal(empty.headers["content-range"], "bytes */0");
+  assert.equal(empty.bytes.length, 0);
+});
+
+test("unsupported or conditional ranges safely fall back to the complete video", async () => {
+  for (const headers of [
+    { Range: "items=0-1" },
+    { Range: "bytes=0-1,4-5" },
+    { Range: "bytes=0-1", "If-Range": '"old-video"' },
+    { Range: "bytes=0-1", "If-Range": "Sat, 05 Sep 2026 00:00:00 GMT" },
+  ]) {
+    const result = await probe("/assets/range-test.mp4", "GET", headers);
+    assert.equal(result.status, 200);
+    assert.equal(result.headers["content-range"], undefined);
+    assert.equal(result.headers["content-length"], String(videoFixture.length));
+    assert.deepEqual(result.bytes, videoFixture);
+  }
+});
+
+test("Range requests cannot bypass private-path and junction checks", async () => {
+  for (const path of ["/.git/HEAD", "/server.mjs", "/.cloudflared/lumi-existing-credentials.json", "/assets/%2E%2E%2F.git%2FHEAD", "/assets/.private.mp4", "/assets/private-alias/private.mp4", "/assets/operations-alias/private.mp4", "/assets/external-alias/secret.mp4"]) {
+    for (const range of ["bytes=0-1", "bytes=999999999-"]) {
+      const result = await probe(path, "GET", { Range: range });
+      assert.equal(result.status, 404, path);
+      assert.equal(result.headers["content-range"], undefined, path);
+      assert.equal(result.headers["cache-control"], "no-store", path);
+      assert.equal(result.body, "Not Found", path);
     }
   }
 });

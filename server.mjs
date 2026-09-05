@@ -40,6 +40,30 @@ function send(res, status, headers, body) {
   res.end(body);
 }
 
+function parseByteRange(header, size) {
+  // Unsupported units and multipart requests fall back to the full file.
+  if (!/^bytes=/i.test(header) || header.includes(",")) return undefined;
+  const match = /^bytes=(\d*)-(\d*)$/i.exec(header);
+  if (!match || (!match[1] && !match[2]) || size === 0) return null;
+
+  // Range positions can exceed JS's safe integer limit. Bound them before
+  // converting back to the numeric offsets accepted by createReadStream.
+  const length = BigInt(size);
+  let start;
+  let end = length - 1n;
+  if (match[1]) {
+    start = BigInt(match[1]);
+    const requestedEnd = match[2] ? BigInt(match[2]) : end;
+    if (start >= length || requestedEnd < start) return null;
+    if (requestedEnd < end) end = requestedEnd;
+  } else {
+    const suffix = BigInt(match[2]);
+    if (suffix === 0n) return null;
+    start = suffix < length ? length - suffix : 0n;
+  }
+  return { start: Number(start), end: Number(end) };
+}
+
 const server = createServer((req, res) => {
   const startedAt = process.hrtime.bigint();
   let logged = false;
@@ -85,10 +109,14 @@ const server = createServer((req, res) => {
   }
 
   let filePath;
+  let fileSize;
   try {
     filePath = realpathSync(resolve(root, relativePath));
     // Resolve symlinks/junctions too: public assets cannot expose sibling files.
-    if (!filePath.startsWith(`${canonicalRoot}${sep}`) || !statSync(filePath).isFile()) throw new Error("Not a public file");
+    if (!filePath.startsWith(`${canonicalRoot}${sep}`)) throw new Error("Not a public file");
+    const fileStat = statSync(filePath);
+    if (!fileStat.isFile()) throw new Error("Not a public file");
+    fileSize = fileStat.size;
     const resolvedRelative = filePath.slice(canonicalRoot.length + 1).split(sep).join("/");
     const resolvedSegments = resolvedRelative.split("/");
     const resolvedPublicAsset = resolvedRelative.startsWith("assets/")
@@ -102,10 +130,27 @@ const server = createServer((req, res) => {
 
   const type = mime.get(extname(filePath).toLowerCase()) || "application/octet-stream";
   const cache = filePath.endsWith("index.html") || filePath.endsWith("site-config.js") ? "no-cache" : "public, max-age=3600";
-  res.writeHead(200, { ...commonHeaders, "Content-Type": type, "Cache-Control": cache });
+  const headers = { "Content-Type": type, "Cache-Control": cache, "Content-Length": fileSize };
+  const isVideo = type === "video/mp4";
+  if (isVideo) headers["Accept-Ranges"] = "bytes";
+  // HEAD describes the full representation and must ignore Range. We publish
+  // no validators, so If-Range cannot match and also requires a full response.
+  const range = isVideo && req.method === "GET" && req.headers.range && req.headers["if-range"] === undefined
+    ? parseByteRange(req.headers.range, fileSize)
+    : undefined;
+  if (range === null) {
+    send(res, 416, { ...headers, "Cache-Control": "no-store", "Content-Range": `bytes */${fileSize}`, "Content-Length": 0 });
+    return;
+  }
+  if (range) {
+    headers["Content-Range"] = `bytes ${range.start}-${range.end}/${fileSize}`;
+    headers["Content-Length"] = range.end - range.start + 1;
+  }
+  res.writeHead(range ? 206 : 200, { ...commonHeaders, ...headers });
   if (req.method === "HEAD") { res.end(); return; }
-  const stream = createReadStream(filePath);
+  const stream = createReadStream(filePath, range);
   stream.on("error", () => res.destroy());
+  res.once("close", () => stream.destroy());
   stream.pipe(res);
 });
 

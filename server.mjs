@@ -2,6 +2,7 @@ import { createReadStream, realpathSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createAccessLogger } from "./scripts/access-log.mjs";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 const host = process.env.LUMI_SITE_HOST || "127.0.0.1";
@@ -9,6 +10,7 @@ const port = Number.parseInt(process.env.LUMI_SITE_PORT || "4173", 10);
 const publicFiles = new Set(["index.html", "styles.css", "app.js", "site-config.js", "robots.txt", "sitemap.xml"]);
 const publicAssetExtensions = new Set([".svg", ".png", ".webp", ".mp4", ".ico"]);
 const canonicalRoot = realpathSync(root);
+const accessLog = createAccessLogger(process.env.LUMI_SITE_LOG_DIR, canonicalRoot);
 
 const mime = new Map([
   [".html", "text/html; charset=utf-8"],
@@ -39,6 +41,23 @@ function send(res, status, headers, body) {
 }
 
 const server = createServer((req, res) => {
+  const startedAt = process.hrtime.bigint();
+  let logged = false;
+  const record = outcome => {
+    if (logged) return;
+    logged = true;
+    // The production Cloudflare connector reaches this server over loopback.
+    const viaLocalConnector = ["127.0.0.1", "::1", "::ffff:127.0.0.1"].includes(req.socket.remoteAddress);
+    accessLog({
+      method: req.method, url: req.url, status: res.headersSent ? res.statusCode : null,
+      durationMs: Number(process.hrtime.bigint() - startedAt) / 1e6,
+      cfRay: viaLocalConnector ? req.headers["cf-ray"] : undefined,
+      outcome,
+    });
+  };
+  res.once("finish", () => record("completed"));
+  res.once("close", () => record("aborted"));
+
   if (req.method !== "GET" && req.method !== "HEAD") {
     send(res, 405, { Allow: "GET, HEAD", "Content-Type": "text/plain; charset=utf-8" }, "Method Not Allowed");
     return;

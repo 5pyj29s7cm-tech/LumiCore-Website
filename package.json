@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node server.mjs",
     "start": "node server.mjs",
-    "check": "node scripts/check-site.mjs && node --test scripts/server.test.mjs"
+    "check": "node scripts/check-site.mjs && node --test scripts/server.test.mjs scripts/access-log.test.mjs"
   },
   "engines": {
     "node": ">=18.0.0"

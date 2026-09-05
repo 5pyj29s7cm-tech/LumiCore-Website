@@ -16,6 +16,16 @@ npm start
 `scripts/start-production.ps1` 监听 `127.0.0.1:80`，健康检查位于
 `http://127.0.0.1:80/healthz`。
 
+生产启动脚本会拒绝网站目录中的 `.cloudflared` 残留，并将请求日志写入
+`%ProgramData%\LumiCore\website\logs\access.jsonl`。日志目录只允许管理员和系统账户访问；
+每个文件最多 5 MiB，保留当前文件与 6 个轮转文件。日志记录时间、方法、路径、状态码、耗时、
+Cloudflare Ray ID 和请求完成情况，不记录查询参数、Cookie、认证头或请求正文。
+本地预览默认不写日志；需要时可将 `LUMI_SITE_LOG_DIR` 设置为网站目录之外的位置。
+
+静态服务只公开首页、前端脚本和样式、站点索引及允许类型的 `assets/` 文件，
+其他路径返回 `404`。`npm run check` 包含真实私有文件、编码路径、Windows 路径、
+目录链接和日志隔离的安全回归测试。不要用直接公开仓库根目录的通用文件服务器替换 `server.mjs`。
+
 ## Cloudflare Tunnel
 
 生产环境复用已有的 `lumi` 命名 Tunnel，不创建第二条 Tunnel：

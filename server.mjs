@@ -1,11 +1,14 @@
-import { createReadStream, existsSync, statSync } from "node:fs";
+import { createReadStream, realpathSync, statSync } from "node:fs";
 import { createServer } from "node:http";
-import { extname, join, normalize, resolve } from "node:path";
+import { extname, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL(".", import.meta.url));
 const host = process.env.LUMI_SITE_HOST || "127.0.0.1";
 const port = Number.parseInt(process.env.LUMI_SITE_PORT || "4173", 10);
+const publicFiles = new Set(["index.html", "styles.css", "app.js", "site-config.js", "robots.txt", "sitemap.xml"]);
+const publicAssetExtensions = new Set([".svg", ".png", ".webp", ".mp4", ".ico"]);
+const canonicalRoot = realpathSync(root);
 
 const mime = new Map([
   [".html", "text/html; charset=utf-8"],
@@ -41,7 +44,9 @@ const server = createServer((req, res) => {
     return;
   }
 
-  const requestUrl = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+  let requestUrl;
+  try { requestUrl = new URL(req.url || "/", "http://localhost"); }
+  catch { send(res, 400, { "Content-Type": "text/plain; charset=utf-8" }, "Bad Request"); return; }
   if (requestUrl.pathname === "/healthz") {
     send(res, 200, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }, JSON.stringify({ ok: true, service: "lumicore-website" }));
     return;
@@ -51,9 +56,27 @@ const server = createServer((req, res) => {
   try { decodedPath = decodeURIComponent(requestUrl.pathname); }
   catch { send(res, 400, { "Content-Type": "text/plain; charset=utf-8" }, "Bad Request"); return; }
 
-  const relativePath = decodedPath === "/" ? "index.html" : normalize(decodedPath).replace(/^([/\\])+/, "");
-  const filePath = resolve(join(root, relativePath));
-  if (!filePath.startsWith(resolve(root)) || !existsSync(filePath) || !statSync(filePath).isFile()) {
+  const relativePath = decodedPath === "/" ? "index.html" : decodedPath.slice(1);
+  const segments = relativePath.split("/");
+  const safeSegments = segments.every(segment => segment && !segment.startsWith(".") && !/[\\:\0]/.test(segment));
+  const publicAsset = relativePath.startsWith("assets/") && publicAssetExtensions.has(extname(relativePath).toLowerCase());
+  if (!safeSegments || (!publicFiles.has(relativePath) && !publicAsset)) {
+    send(res, 404, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" }, "Not Found");
+    return;
+  }
+
+  let filePath;
+  try {
+    filePath = realpathSync(resolve(root, relativePath));
+    // Resolve symlinks/junctions too: public assets cannot expose sibling files.
+    if (!filePath.startsWith(`${canonicalRoot}${sep}`) || !statSync(filePath).isFile()) throw new Error("Not a public file");
+    const resolvedRelative = filePath.slice(canonicalRoot.length + 1).split(sep).join("/");
+    const resolvedSegments = resolvedRelative.split("/");
+    const resolvedPublicAsset = resolvedRelative.startsWith("assets/")
+      && resolvedSegments.every(segment => segment && !segment.startsWith("."))
+      && publicAssetExtensions.has(extname(resolvedRelative).toLowerCase());
+    if (publicAsset ? !resolvedPublicAsset : resolvedRelative !== relativePath) throw new Error("Not a public target");
+  } catch {
     send(res, 404, { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" }, "Not Found");
     return;
   }
@@ -62,11 +85,13 @@ const server = createServer((req, res) => {
   const cache = filePath.endsWith("index.html") || filePath.endsWith("site-config.js") ? "no-cache" : "public, max-age=3600";
   res.writeHead(200, { ...commonHeaders, "Content-Type": type, "Cache-Control": cache });
   if (req.method === "HEAD") { res.end(); return; }
-  createReadStream(filePath).pipe(res);
+  const stream = createReadStream(filePath);
+  stream.on("error", () => res.destroy());
+  stream.pipe(res);
 });
 
 server.listen(port, host, () => {
-  console.log(`[lumicore-website] listening on http://${host}:${port}`);
+  console.log(`[lumicore-website] listening on http://${host}:${server.address().port}`);
 });
 
 const shutdown = () => server.close(() => process.exit(0));

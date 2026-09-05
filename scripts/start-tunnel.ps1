@@ -1,5 +1,5 @@
 param(
-  [string]$ConfigPath = "$env:USERPROFILE\.cloudflared\config.yml",
+  [string]$ConfigPath = "$env:ProgramData\LumiCore\cloudflared\lumi.yml",
   [string]$TunnelName = "lumi"
 )
 

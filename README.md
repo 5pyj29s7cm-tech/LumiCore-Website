@@ -26,13 +26,15 @@ cloudflared tunnel route dns lumi lumiai.asia
 cloudflared tunnel route dns lumi www.lumiai.asia
 ```
 
-复制 `cloudflare/config.example.yml` 到 `%USERPROFILE%\.cloudflared\config.yml`，填写 Tunnel UUID 和凭据路径后运行：
+生产配置使用 `%ProgramData%\LumiCore\cloudflared\lumi.yml`，该目录仅允许管理员和系统账户访问。已有部署直接运行：
 
 ```powershell
 .\scripts\start-tunnel.ps1
 ```
 
-Tunnel 只指向官网端口 `80`，不要指向 LumiCore 后端端口，也不要把 Cloudflare 凭据提交到 Git。
+新部署可将 `cloudflare/config.example.yml` 复制到上述生产配置路径，再填写 Tunnel UUID 和凭据文件的绝对路径。凭据必须保存在网站目录之外；自定义配置可通过 `-ConfigPath` 指定。远程管理的 Tunnel 还需在 Cloudflare 中核对正式域名路由。
+
+Tunnel 只指向官网端口 `80`，不要指向 LumiCore 后端端口，也不要把 Cloudflare 凭据提交到 Git。凭据轮换后需更新运行服务的配置，并重载连接器；不能仅替换磁盘文件就认为旧连接已退出。
 
 ## 官方服务入口
 

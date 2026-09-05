@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" role="img" aria-labelledby="circuit-title circuit-desc">
+  <title id="circuit-title">LumiCore 与设备、工具及外部智能体的连接</title>
+  <desc id="circuit-desc">中央方形 LumiCore 芯片承载记忆、身份与执行，线路分别连接电脑、智能家居、机器人、汽车、MCP 工具和外部智能体。</desc>
+  <defs>
+    <pattern id="paper-grid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r=".65" fill="#34332f" opacity=".13"/></pattern>
+    <filter id="chip-shadow" x="-25%" y="-25%" width="150%" height="160%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#37342d" flood-opacity=".16"/></filter>
+    <linearGradient id="chip-surface" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#343632"/><stop offset="1" stop-color="#20231f"/></linearGradient>
+    <style>
+      text{font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif}
+      .device{fill:none;stroke:#343631;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+      .detail{stroke:#76776d;stroke-width:1.35}
+      .copper{stroke:#ab6c43}
+      .label{fill:#343631;font-size:20px;font-weight:600;text-anchor:middle;letter-spacing:.5px}
+      .trace{fill:none;stroke:#777c6e;stroke-width:1.6;stroke-linejoin:round}
+      .via{fill:#eee9df;stroke:#a46c49;stroke-width:1.6}
+    </style>
+  </defs>
+  <rect width="1200" height="500" fill="#eee9df"/>
+  <rect x="28" y="28" width="1144" height="444" fill="url(#paper-grid)"/>
+  <g fill="#74776d" font-size="12" letter-spacing="2.2"><text x="44" y="39">LUMICORE / CONNECTED SYSTEM</text><text x="1156" y="39" text-anchor="end">ARCHITECTURE</text></g>
+  <g stroke="#b7b7a9" stroke-width="1" opacity=".55"><path d="M44 53h1112M44 447h1112"/><path d="M44 48v10m1112-10v10M44 442v10m1112-10v10"/></g>
+
+  <!-- Independent signal paths terminate at physical chip pins. -->
+  <g class="trace">
+    <path d="M310 114h88l56 56v40h46"/>
+    <path d="M310 122h82l54 54v42h54" opacity=".35"/>
+    <path d="M224 250h276"/>
+    <path d="M258 258h185l24 24h33" opacity=".3"/>
+    <path d="M310 383h92l52-52v-37h46"/>
+    <path d="M310 391h98l54-54v-35h38" opacity=".35"/>
+    <path d="M890 114h-88l-56 56v40h-46"/>
+    <path d="M890 122h-82l-54 54v42h-54" opacity=".35"/>
+    <path d="M976 250H700"/>
+    <path d="M942 258H757l-24 24h-33" opacity=".3"/>
+    <path d="M890 383h-92l-52-52v-37h-46"/>
+    <path d="M890 391h-98l-54-54v-35h-38" opacity=".35"/>
+  </g>
+  <g fill="none" stroke="#ad724b" stroke-width="2"><path d="M454 190v20h46M700 210h46v-20M420 250h80M700 250h80M454 313v-19h46M700 294h46v19"/></g>
+  <g class="via"><circle cx="310" cy="114" r="3.2"/><circle cx="224" cy="250" r="3.2"/><circle cx="310" cy="383" r="3.2"/><circle cx="890" cy="114" r="3.2"/><circle cx="976" cy="250" r="3.2"/><circle cx="890" cy="383" r="3.2"/></g>
+  <g fill="#85897b"><circle cx="398" cy="114" r="2"/><circle cx="402" cy="383" r="2"/><circle cx="802" cy="114" r="2"/><circle cx="798" cy="383" r="2"/></g>
+
+  <!-- Computer: display, stand, keyboard and inset window. -->
+  <g class="device" transform="translate(228 74)">
+    <rect x="0" y="0" width="77" height="51" rx="4"/><path d="M0 42h77M31 51v11m15-11v11M21 63h35M-7 72h91l-5 6H-2z"/>
+    <path class="detail" d="M8 9h61v25H8zM8 16h61M15 12h1m5 0h1M13 25h22m-22 5h34"/>
+    <path class="copper" d="M52 24l4 4 8-8"/>
+  </g>
+  <text class="label" x="267" y="180">电脑</text>
+
+  <!-- Smart home: pitched roof, windows and a connected wall control. -->
+  <g class="device" transform="translate(906 70)">
+    <path d="M-4 35 33 4l37 31M4 30v47h58V30M26 77V51h17v26"/>
+    <rect x="12" y="39" width="11" height="12" rx="1"/><path class="detail" d="M47 40h8v10h-8M4 69h58M-9 81h84"/>
+    <path class="copper" d="M59 6a18 18 0 0 1 21 18M62 13a11 11 0 0 1 11 11"/><circle cx="65" cy="23" r="2" fill="#ab6c43" stroke="none"/>
+  </g>
+  <text class="label" x="940" y="180">智能家居</text>
+
+  <!-- External agents: distinct peer processors, each with an independent core. -->
+  <g class="device" transform="translate(114 216)">
+    <rect x="22" y="7" width="43" height="43" rx="8"/><path d="M35 7V0m17 7V0M22 20h-8m8 18h-8m51-18h8m-8 18h8M35 50v8m17-8v8"/>
+    <path class="copper" d="M35 30 43 20l9 10-9 9z"/>
+    <path class="detail" d="M6 59h20v19H6zM62 59h20v19H62zM26 68h36M16 59V50h6m50 9V50h-7"/>
+  </g>
+  <text class="label" x="157" y="326">外部智能体</text>
+
+  <!-- Robot: articulated arms, sensors, and a compact mechanical base. -->
+  <g class="device" transform="translate(1005 210)">
+    <rect x="18" y="5" width="45" height="31" rx="8"/><path d="M40 5V-2M25 37v7h31v-7M18 44h45v35H18zM18 49 7 58v14m56-23 11 9v14M29 80v7m23-7v7M19 88h17m10 0h17"/>
+    <circle cx="30" cy="20" r="3" fill="#ab6c43" stroke="none"/><circle cx="51" cy="20" r="3" fill="#ab6c43" stroke="none"/>
+    <path class="detail" d="M30 30h21M28 54h26v14H28zM35 61h12M2 73h10m58 0h10"/>
+  </g>
+  <text class="label" x="1046" y="326">机器人</text>
+
+  <!-- MCP tools: a precision connector and tool glyph, without a card container. -->
+  <g class="device" transform="translate(228 334)">
+    <path d="M8 8h20v20H8zM51 8h20v20H51zM8 49h20v20H8zM51 49h20v20H51zM28 18h23M18 28v21m43-21v21M28 59h23"/>
+    <path class="copper" d="m34 31-7 7 7 7m12-14 7 7-7 7M42 29l-4 18"/>
+    <path class="detail" d="M14 14h8v8h-8m43 0v-8h8M14 55h8v8h-8m43 0v-8h8"/>
+  </g>
+  <text class="label" x="267" y="439">工具 · MCP</text>
+
+  <!-- Car: body silhouette, wheel construction and sensing arc. -->
+  <g class="device" transform="translate(893 345)">
+    <path d="M5 37 13 20l16-6h37l18 18 10 4v20H82m-54 0h31M5 56H-1V40zM22 20h37l12 14H15zM45 20v14"/>
+    <circle cx="17" cy="54" r="11"/><circle cx="70" cy="54" r="11"/><circle class="detail" cx="17" cy="54" r="4"/><circle class="detail" cx="70" cy="54" r="4"/>
+    <path class="detail" d="M2 41h10m70 0h10M33 42h9"/><path class="copper" d="M45 5a20 20 0 0 1 18 3M48-3a28 28 0 0 1 25 5"/>
+  </g>
+  <text class="label" x="940" y="439">汽车</text>
+
+  <!-- Machined chip package with discrete pins and etched corner registration. -->
+  <g stroke="#8a8c7f" stroke-width="4" stroke-linecap="square">
+    <path d="M536 153v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12M536 341v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12M500 186h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12M688 186h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12"/>
+  </g>
+  <rect x="512" y="165" width="176" height="176" rx="9" fill="url(#chip-surface)" stroke="#4b4f44" stroke-width="2" filter="url(#chip-shadow)"/>
+  <rect x="525" y="178" width="150" height="150" rx="4" fill="none" stroke="#686d5b" stroke-width="1"/>
+  <path d="M536 198v-9h9m110 0h9v9M536 308v9h9m110 0h9v-9" fill="none" stroke="#b9865d" stroke-width="1.4"/>
+  <circle cx="538" cy="211" r="2.5" fill="#b9865d"/>
+  <text x="600" y="241" text-anchor="middle" fill="#f0eee6" font-size="27" font-weight="650" letter-spacing="-.7">LumiCore</text>
+  <path d="M555 258h90" stroke="#ad7952" stroke-width="1"/>
+  <text x="600" y="286" text-anchor="middle" fill="#d5d5c9" font-size="18">记忆 · 身份 · 执行</text>
+  <text x="600" y="388" text-anchor="middle" fill="#72776a" font-size="18" letter-spacing="2">统一智能中枢</text>
+  <text x="44" y="479" fill="#74776d" font-size="18">接入场景示意</text>
+  <g stroke="#a6a797" stroke-width="1"><path d="M1096 472h60m-60 5v-10m20 10v-10m20 10v-10m20 10v-10"/></g>
+</svg>

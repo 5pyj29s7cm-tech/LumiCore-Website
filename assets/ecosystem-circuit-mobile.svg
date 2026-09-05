@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="660" viewBox="0 0 520 660" role="img" aria-labelledby="mobile-circuit-title mobile-circuit-desc">
+  <title id="mobile-circuit-title">LumiCore 设备连接架构</title>
+  <desc id="mobile-circuit-desc">为手机独立排版的架构图。中央 LumiCore 芯片连接上方的电脑与智能家居、两侧的外部智能体与机器人、下方的 MCP 工具与汽车。</desc>
+  <defs>
+    <pattern id="mobile-paper-grid" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="11" cy="11" r=".65" fill="#34332f" opacity=".12"/></pattern>
+    <linearGradient id="mobile-chip" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#343632"/><stop offset="1" stop-color="#20231f"/></linearGradient>
+    <filter id="mobile-shadow" x="-25%" y="-25%" width="150%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#37342d" flood-opacity=".15"/></filter>
+    <style>
+      text{font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif}
+      .device{fill:none;stroke:#343631;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+      .detail{stroke:#76776d;stroke-width:1.6}
+      .copper{stroke:#ab6c43}
+      .label{fill:#343631;font-size:24px;font-weight:600;text-anchor:middle}
+      .trace{fill:none;stroke:#7c806f;stroke-width:1.7;stroke-linejoin:round}
+      .via{fill:#eee9df;stroke:#a46c49;stroke-width:1.8}
+    </style>
+  </defs>
+  <rect width="520" height="660" fill="#eee9df"/>
+  <rect x="20" y="20" width="480" height="620" fill="url(#mobile-paper-grid)"/>
+  <text x="26" y="34" fill="#74776d" font-size="13" letter-spacing="1.4">LUMICORE / CONNECTED SYSTEM</text>
+  <path d="M26 49h468M26 606h468" stroke="#b7b7a9" opacity=".7"/>
+
+  <!-- Vertical routing uses separate top and bottom chip ports. -->
+  <g class="trace">
+    <path d="M112 181v24l22 22h86v13M120 181v20l18 18h90v21"/>
+    <path d="M408 181v24l-22 22h-86v13M400 181v20l-18 18h-90v21"/>
+    <path d="M135 310h33M139 318h29"/>
+    <path d="M385 310h-33M381 318h-29"/>
+    <path d="M220 418v24h-86l-22 22v17M228 418v32h-90l-18 18v13"/>
+    <path d="M300 418v24h86l22 22v17M292 418v32h90l18 18v13"/>
+  </g>
+  <g fill="none" stroke="#ad724b" stroke-width="2"><path d="M220 229v11M300 229v11M150 310h18M352 310h18M220 418v13M300 418v13"/></g>
+  <g class="via"><circle cx="112" cy="181" r="3"/><circle cx="408" cy="181" r="3"/><circle cx="135" cy="310" r="3"/><circle cx="385" cy="310" r="3"/><circle cx="112" cy="481" r="3"/><circle cx="408" cy="481" r="3"/></g>
+
+  <g class="device" transform="translate(74 74)">
+    <rect width="76" height="49" rx="4"/><path d="M0 40h76M30 49v11m16-11v11M20 61h36M-7 69h90l-5 6H-2z"/>
+    <path class="detail" d="M9 9h58v23H9zM9 16h58M14 12h1m5 0h1M14 24h22"/>
+    <path class="copper" d="m48 23 5 4 8-8"/>
+  </g>
+  <text class="label" x="112" y="176">电脑</text>
+  <g class="device" transform="translate(374 69)">
+    <path d="M-4 34 33 4l37 30M4 29v47h58V29M26 76V50h17v26"/><rect x="12" y="38" width="11" height="12" rx="1"/>
+    <path class="detail" d="M47 39h8v10h-8M4 68h58M-9 80h84"/>
+    <path class="copper" d="M59 6a18 18 0 0 1 21 18M62 13a11 11 0 0 1 11 11"/><circle cx="65" cy="23" r="2" fill="#ab6c43" stroke="none"/>
+  </g>
+  <text class="label" x="408" y="176">智能家居</text>
+
+  <g class="device" transform="translate(41 269)">
+    <rect x="20" y="7" width="41" height="41" rx="7"/><path d="M33 7V0m16 7V0M20 19h-7m7 17h-7m48-17h7m-7 17h7M33 48v7m16-7v7"/>
+    <path class="copper" d="m32 28 8-9 9 9-9 9z"/>
+    <path class="detail" d="M3 59h20v18H3zM59 59h20v18H59zM23 68h36M13 59V48h7m49 11V48h-8"/>
+  </g>
+  <text class="label" x="82" y="379">外部智能体</text>
+  <g class="device" transform="translate(398 265)">
+    <rect x="16" y="5" width="43" height="30" rx="7"/><path d="M37 5V-2M23 36v7h29v-7M16 43h43v33H16zM16 48 5 57v13m54-22 11 9v13M27 77v7m22-7v7M17 85h17m9 0h16"/>
+    <circle cx="28" cy="19" r="3" fill="#ab6c43" stroke="none"/><circle cx="48" cy="19" r="3" fill="#ab6c43" stroke="none"/>
+    <path class="detail" d="M28 28h20M26 52h23v14H26zM32 59h11M0 72h10m55 0h10"/>
+  </g>
+  <text class="label" x="437" y="379">机器人</text>
+
+  <g class="device" transform="translate(74 490)">
+    <path d="M7 7h20v20H7zM50 7h20v20H50zM7 48h20v20H7zM50 48h20v20H50zM27 17h23M17 27v21m43-21v21M27 58h23"/>
+    <path class="copper" d="m33 30-7 7 7 7m12-14 7 7-7 7M41 28l-4 18"/>
+    <path class="detail" d="M13 13h8v8h-8m43 0v-8h8M13 54h8v8h-8m43 0v-8h8"/>
+  </g>
+  <text class="label" x="112" y="588">工具 · MCP</text>
+  <g class="device" transform="translate(360 490)">
+    <path d="M5 37 13 20l16-6h37l18 18 10 4v20H82m-54 0h31M5 56H-1V40zM22 20h37l12 14H15zM45 20v14"/>
+    <circle cx="17" cy="54" r="11"/><circle cx="70" cy="54" r="11"/><circle class="detail" cx="17" cy="54" r="4"/><circle class="detail" cx="70" cy="54" r="4"/>
+    <path class="detail" d="M2 41h10m70 0h10M33 42h9"/><path class="copper" d="M45 5a20 20 0 0 1 18 3M48-3a28 28 0 0 1 25 5"/>
+  </g>
+  <text class="label" x="408" y="588">汽车</text>
+
+  <g stroke="#8a8c7f" stroke-width="4" stroke-linecap="square">
+    <path d="M196 240v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12M196 406v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12m16-12v12M168 272h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12M340 272h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12m-12 16h12"/>
+  </g>
+  <rect x="180" y="252" width="160" height="160" rx="8" fill="url(#mobile-chip)" stroke="#4b4f44" stroke-width="2" filter="url(#mobile-shadow)"/>
+  <rect x="190" y="262" width="140" height="140" rx="3" fill="none" stroke="#686d5b"/>
+  <path d="M200 279v-7h7m106 0h7v7M200 379v7h7m106 0h7v-7" fill="none" stroke="#b9865d" stroke-width="1.4"/>
+  <text x="260" y="300" fill="#f0eee6" font-size="25" font-weight="650" text-anchor="middle" letter-spacing="-.6">LumiCore</text>
+  <path d="M216 314h88" stroke="#ad7952"/>
+  <text x="260" y="344" fill="#d5d5c9" font-size="24" text-anchor="middle">记忆 · 身份</text>
+  <text x="260" y="375" fill="#d5d5c9" font-size="24" text-anchor="middle">执行</text>
+  <text x="26" y="641" fill="#74776d" font-size="24">接入场景示意</text>
+  <g stroke="#a6a797" stroke-width="1.2"><path d="M424 634h70m-70 5v-10m23 10v-10m23 10v-10m24 10v-10"/></g>
+</svg>
